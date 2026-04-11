@@ -1,0 +1,20 @@
+:lang(ja) label,
+:lang(ja) input,
+:lang(ja) textarea,
+:lang(ja) select,
+:lang(ja) button {
+  line-break: strict;
+  word-break: normal;
+}
+
+:lang(ja) input,
+:lang(ja) textarea,
+:lang(ja) select {
+  line-height: 1.5;
+}
+
+:lang(ja) .form-help,
+:lang(ja) .form-error {
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}

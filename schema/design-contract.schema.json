@@ -1,0 +1,65 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Design Contract Schema",
+  "description": "Foundational schema for structured exports of a Japanese UI design contract.",
+  "type": "object",
+  "properties": {
+    "locale": {
+      "type": "string",
+      "examples": [
+        "ja-JP"
+      ]
+    },
+    "profile": {
+      "type": "string",
+      "enum": [
+        "base",
+        "media",
+        "saas",
+        "docs",
+        "dashboard"
+      ]
+    },
+    "reviewStatus": {
+      "type": "string",
+      "enum": [
+        "draft",
+        "verified",
+        "production"
+      ]
+    },
+    "typography": {
+      "type": "object",
+      "properties": {
+        "bodyLineHeight": {
+          "type": [
+            "number",
+            "string"
+          ]
+        },
+        "bodyLetterSpacing": {
+          "type": "string"
+        },
+        "fontStack": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": true
+    },
+    "layout": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "validationTargets": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  },
+  "required": [
+    "locale",
+    "profile",
+    "reviewStatus"
+  ]
+}

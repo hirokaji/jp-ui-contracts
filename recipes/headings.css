@@ -1,0 +1,21 @@
+:lang(ja) h1,
+:lang(ja) h2,
+:lang(ja) h3,
+:lang(ja) h4 {
+  line-break: strict;
+  word-break: normal;
+  overflow-wrap: anywhere;
+  font-kerning: auto;
+}
+
+:lang(ja) h1 {
+  line-height: 1.35;
+}
+
+:lang(ja) h2 {
+  line-height: 1.4;
+}
+
+:lang(ja) h3 {
+  line-height: 1.45;
+}

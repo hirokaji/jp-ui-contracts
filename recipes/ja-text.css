@@ -1,0 +1,23 @@
+html:lang(ja) {
+  line-break: strict;
+  word-break: normal;
+  overflow-wrap: anywhere;
+  font-kerning: auto;
+  font-feature-settings: normal;
+}
+
+body {
+  text-rendering: optimizeLegibility;
+}
+
+p,
+li,
+dd {
+  line-break: strict;
+  word-break: normal;
+  overflow-wrap: anywhere;
+}
+
+:where(article, .prose, .content) p {
+  max-width: 42em;
+}

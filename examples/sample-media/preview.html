@@ -1,0 +1,282 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>jp-ui-contracts / sample-media preview</title>
+  <link rel="stylesheet" href="../../recipes/ja-text.css" />
+  <link rel="stylesheet" href="../../recipes/mixed-script.css" />
+  <link rel="stylesheet" href="../../recipes/headings.css" />
+  <style>
+    :root {
+      --bg: #f7f6f2;
+      --surface: #ffffff;
+      --text: #202124;
+      --subtle: #667085;
+      --line: #e5e7eb;
+      --accent: #223044;
+      --accent-soft: #eaf0ff;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      color: var(--text);
+      background: linear-gradient(180deg, #f7f6f2 0%, #f2f4f7 100%);
+      font-family: "Noto Sans JP", "Hiragino Sans", "Yu Gothic UI", Meiryo, sans-serif;
+    }
+
+    .page {
+      width: min(100%, 1100px);
+      margin: 0 auto;
+      padding: 48px 24px 80px;
+    }
+
+    .hero {
+      margin-bottom: 40px;
+      padding: 36px;
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      background: rgba(255,255,255,0.82);
+      backdrop-filter: blur(12px);
+    }
+
+    .eyebrow {
+      display: inline-block;
+      margin-bottom: 16px;
+      padding: 6px 12px;
+      border-radius: 999px;
+      background: var(--accent-soft);
+      color: var(--accent);
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+    }
+
+    h1 {
+      margin: 0 0 18px;
+      font-size: clamp(30px, 4vw, 42px);
+      font-weight: 700;
+      line-height: 1.4;
+      letter-spacing: 0.02em;
+    }
+
+    .lead {
+      margin: 0;
+      max-width: 46em;
+      color: #404856;
+      font-size: 18px;
+      line-height: 1.9;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 260px;
+      gap: 28px;
+      align-items: start;
+    }
+
+    article {
+      padding: 36px;
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      background: var(--surface);
+    }
+
+    article h2 {
+      margin: 40px 0 16px;
+      font-size: 28px;
+      font-weight: 700;
+    }
+
+    article h3 {
+      margin: 28px 0 12px;
+      font-size: 22px;
+      font-weight: 700;
+    }
+
+    article p {
+      margin: 0 0 1.25em;
+      font-size: 18px;
+      line-height: 1.9;
+    }
+
+    blockquote {
+      margin: 32px 0;
+      padding: 20px 24px;
+      border-left: 4px solid var(--accent);
+      background: #f8fafc;
+      border-radius: 16px;
+    }
+
+    .meta {
+      position: sticky;
+      top: 24px;
+      padding: 24px;
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      background: rgba(255,255,255,0.82);
+      backdrop-filter: blur(12px);
+    }
+
+    .meta h3 {
+      margin: 0 0 16px;
+      font-size: 16px;
+    }
+
+    .meta dl {
+      margin: 0;
+      display: grid;
+      row-gap: 14px;
+    }
+
+    .meta dt {
+      margin: 0 0 4px;
+      color: var(--subtle);
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .meta dd {
+      margin: 0;
+      font-size: 14px;
+      line-height: 1.7;
+    }
+
+    .image-card {
+      margin: 28px 0 20px;
+      padding: 18px;
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      background: #fcfcfd;
+    }
+
+    .image-frame {
+      aspect-ratio: 16 / 9;
+      border-radius: 14px;
+      background:
+        radial-gradient(circle at top left, rgba(34,48,68,0.18), transparent 36%),
+        linear-gradient(135deg, #eef2ff 0%, #f8fafc 50%, #eef2f7 100%);
+      border: 1px solid #e7e7ef;
+    }
+
+    .caption {
+      margin-top: 12px;
+      color: var(--subtle);
+      font-size: 14px;
+      line-height: 1.7;
+    }
+
+    code {
+      padding: 0.12em 0.4em;
+      border-radius: 6px;
+      background: #f3f4f6;
+      font-family: "BIZ UDGothic", "SFMono-Regular", Consolas, monospace;
+      font-size: 0.9em;
+    }
+
+    @media (max-width: 900px) {
+      .grid {
+        grid-template-columns: 1fr;
+      }
+
+      .meta {
+        position: static;
+      }
+
+      article {
+        padding: 24px;
+      }
+
+      .hero {
+        padding: 28px 24px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <section class="hero">
+      <div class="eyebrow">sample-media preview</div>
+      <h1>日本語UIの呼吸を壊さないための<br>DESIGN.md と mixed-script 設計</h1>
+      <p class="lead">
+        この preview は、記事メディア向けの contract を置いたときに、本文、見出し、URL、
+        日本語 + English product name の混在がどう見えるかを確認するための最小サンプルです。
+      </p>
+    </section>
+
+    <div class="grid">
+      <article>
+        <p>
+          日本語UIの品質は、色や角丸だけでは決まりません。特に長文画面では、
+          <span class="product-name">Design Contract</span> の有無が、本文の呼吸、見出しの折り返し、
+          URL のはみ出し、和欧混植の違和感にそのまま出ます。
+        </p>
+
+        <p>
+          たとえば「AI builder 向けの design system」という見出しをそのまま置くと、英語部分だけが
+          浮いたり、モバイルで苦しい位置で折れたりします。だからこそ、日本語本文の line-height、
+          mixed-script 見出し、URL overflow の扱いを別々に contract する必要があります。
+        </p>
+
+        <div class="image-card">
+          <div class="image-frame" aria-hidden="true"></div>
+          <div class="caption">
+            キャプション例: 画像は文章の流れを切るためではなく、読書のリズムを切り替えるために置く。
+          </div>
+        </div>
+
+        <h2>まず contract に戻すべきもの</h2>
+        <p>
+          最初から完璧な design system を書く必要はありません。まずは「壊れやすい箇所」を contract に戻します。
+          典型例は、長文本文、mixed-script 見出し、長い URL、引用、キャプション、そして narrow width です。
+        </p>
+
+        <blockquote>
+          <p>
+            きれいなスクリーンショットより先に、長文を実際に読めることを確認する。  
+            これが media profile の最優先です。
+          </p>
+        </blockquote>
+
+        <h2>URL と長い語の挙動</h2>
+        <p>
+          たとえば次のURLが記事中に入っても、段落全体の可読性を壊さないことが重要です。  
+          https://example.com/design-contracts/japanese-ui/mixed-script-heading-and-long-url-overflow-check
+        </p>
+
+        <h3>本文の字間は盛らない</h3>
+        <p>
+          日本語の本文では、見出しやラベルと違って、字間を強く開くほど読みやすくなるとは限りません。
+          まずは本文の行間で呼吸を作り、字間は保守的に保つほうが安定します。
+        </p>
+      </article>
+
+      <aside class="meta">
+        <h3>Review targets</h3>
+        <dl>
+          <div>
+            <dt>Profile</dt>
+            <dd>media</dd>
+          </div>
+          <div>
+            <dt>Check</dt>
+            <dd>長文本文 / 見出し折り返し / mixed-script / URL overflow / caption</dd>
+          </div>
+          <div>
+            <dt>Body</dt>
+            <dd>18px / line-height 1.9 / letter-spacing normal</dd>
+          </div>
+          <div>
+            <dt>Note</dt>
+            <dd>見出しと本文の spacing logic を分ける。本文に過剰な tracking を入れない。</dd>
+          </div>
+        </dl>
+      </aside>
+    </div>
+  </div>
+</body>
+</html>
