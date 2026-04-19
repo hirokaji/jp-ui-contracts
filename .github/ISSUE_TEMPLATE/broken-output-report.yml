@@ -1,0 +1,125 @@
+name: Broken output report
+description: Report a generated UI output that breaks Japanese readability, wrapping, density, or mixed-script stability.
+title: "[broken-output] "
+labels:
+  - broken-output
+  - needs-triage
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reporting a broken output.
+        Please focus on **what broke**, **where it broke**, and **which contract/profile was used**.
+        Screenshots and concrete UI fragments are much more useful than abstract impressions.
+
+  - type: dropdown
+    id: profile
+    attributes:
+      label: Which profile did you use?
+      description: Select the closest profile that was active when the output was generated.
+      options:
+        - base
+        - media
+        - saas
+        - docs
+        - dashboard
+        - custom overlay on top of an existing profile
+    validations:
+      required: true
+
+  - type: input
+    id: contract-version
+    attributes:
+      label: Contract version or commit
+      description: Paste the version, commit hash, tag, or branch if known.
+      placeholder: e.g. main @ 8c2f1a7
+    validations:
+      required: false
+
+  - type: dropdown
+    id: surface
+    attributes:
+      label: Where did the issue appear?
+      options:
+        - article page
+        - landing page
+        - admin / SaaS screen
+        - docs / help page
+        - dashboard / analytics screen
+        - mobile-only layout
+        - other
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: symptoms
+    attributes:
+      label: What broke?
+      description: Select all that apply.
+      options:
+        - label: Long Japanese paragraphs feel cramped
+        - label: Heading wrap is awkward
+        - label: Mixed Japanese-English text looks unstable
+        - label: Long URL or long English token overflows
+        - label: Table density is too high or too loose
+        - label: Form labels / help text / errors are hard to read
+        - label: Mobile wrapping is unstable
+        - label: Font fallback feels wrong
+        - label: Other
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: What did you expect instead?
+      description: Describe the intended behavior or the visual quality you wanted.
+      placeholder: e.g. The heading should wrap later, the paragraph should breathe more, the form help text should remain readable on mobile.
+    validations:
+      required: true
+
+  - type: textarea
+    id: observed
+    attributes:
+      label: What actually happened?
+      description: Be concrete. Mention the exact screen region, text type, and failure mode.
+      placeholder: e.g. The H2 broke after the product name, the URL forced the whole card wider, the form error text became too dense.
+    validations:
+      required: true
+
+  - type: textarea
+    id: repro
+    attributes:
+      label: Minimal reproduction
+      description: Paste the smallest UI fragment, prompt fragment, or HTML/CSS snippet that reproduces the issue.
+      placeholder: Include contract excerpt, generated snippet, or fixture-like text if possible.
+    validations:
+      required: false
+
+  - type: textarea
+    id: screenshots
+    attributes:
+      label: Screenshots or links
+      description: Paste screenshot links, preview links, or attach images after creating the issue.
+      placeholder: Add one or more screenshots and specify desktop / mobile if relevant.
+    validations:
+      required: true
+
+  - type: textarea
+    id: contract-snippet
+    attributes:
+      label: Relevant contract snippet
+      description: Paste the relevant part of DESIGN.md if possible.
+      placeholder: e.g. typography rules, line-break rules, form density rules
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Before submitting
+      options:
+        - label: I checked whether this is caused by a local implementation override rather than the contract itself.
+          required: true
+        - label: I included enough detail for someone else to reproduce or inspect the issue.
+          required: true
