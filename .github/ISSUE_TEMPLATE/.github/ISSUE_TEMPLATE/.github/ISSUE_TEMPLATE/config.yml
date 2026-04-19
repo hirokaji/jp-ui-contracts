@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Show your preview
+    url: https://github.com/hirokaji/jp-ui-contracts/discussions
+    about: Share generated screenshots, preview links, and review findings in Discussions.
+  - name: Read contribution guide
+    url: https://github.com/hirokaji/jp-ui-contracts/blob/main/CONTRIBUTING.md
+    about: Check the repository contribution rules before opening an issue.
