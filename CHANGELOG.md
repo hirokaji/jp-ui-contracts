@@ -27,7 +27,8 @@ All notable changes to `jp-ui-contracts` are documented here.
   - mobile wrapping stress
 - Playwright 1.63.0 rendered validation harness
   - desktop Chromium project
-  - mobile Chromium project using the iPhone 15 device profile
+  - mobile Chromium project using the Pixel 7 device profile
+  - explicit Chromium browser binding for both projects
   - document-level horizontal overflow gate across P0/P1 fixtures
   - dense-table local overflow containment check
   - form label / helper / error / control inspection
@@ -47,6 +48,7 @@ All notable changes to `jp-ui-contracts` are documented here.
 - replaced the stale README roadmap with implemented status and release-gate conditions
 - made failure attribution explicit: missing rule / weak profile default / fixture gap / validator gap / implementation bug
 - extended the core loop from static contract checks to rendered browser Evidence
+- corrected the mobile project from an iPhone descriptor that implicitly selected WebKit to a Chromium-bound Pixel 7 profile, keeping the declared browser gate aligned with installed CI dependencies
 
 ### Not included yet
 
