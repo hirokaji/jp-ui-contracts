@@ -28,13 +28,15 @@ export default defineConfig({
       name: 'desktop-chromium',
       use: {
         ...devices['Desktop Chrome'],
+        browserName: 'chromium',
         viewport: { width: 1440, height: 1000 },
       },
     },
     {
       name: 'mobile-chromium',
       use: {
-        ...devices['iPhone 15'],
+        ...devices['Pixel 7'],
+        browserName: 'chromium',
       },
     },
   ],
