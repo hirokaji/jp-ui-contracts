@@ -1,6 +1,6 @@
 {
   "name": "jp-ui-contracts",
-  "version": "0.2.0-dev",
+  "version": "0.2.0",
   "private": true,
   "description": "Rendered validation harness for Japanese UI design contracts.",
   "scripts": {
