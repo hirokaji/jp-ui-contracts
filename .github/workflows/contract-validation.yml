@@ -1,6 +1,9 @@
 name: contract-validation
 
 on:
+  workflow_dispatch:
+  schedule:
+    - cron: "17 3 * * 1"
   pull_request:
     paths:
       - "templates/**/DESIGN.md"
@@ -25,6 +28,10 @@ on:
       - "package.json"
       - "playwright.config.mjs"
       - ".github/workflows/contract-validation.yml"
+
+concurrency:
+  group: contract-validation-${{ github.ref }}
+  cancel-in-progress: true
 
 permissions:
   contents: read
