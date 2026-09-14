@@ -6,6 +6,12 @@ on:
     - cron: "17 3 * * 1"
   pull_request:
     paths:
+      - "VERSION"
+      - "RELEASE_MANIFEST.json"
+      - "README.md"
+      - "CHANGELOG.md"
+      - "AGENTS.md"
+      - "docs/**"
       - "templates/**/DESIGN.md"
       - "examples/**/DESIGN.md"
       - "fixtures/**"
@@ -14,11 +20,19 @@ on:
       - "tests/**"
       - "package.json"
       - "playwright.config.mjs"
+      - ".github/dependabot.yml"
+      - ".github/pull_request_template.md"
       - ".github/workflows/contract-validation.yml"
   push:
     branches:
       - main
     paths:
+      - "VERSION"
+      - "RELEASE_MANIFEST.json"
+      - "README.md"
+      - "CHANGELOG.md"
+      - "AGENTS.md"
+      - "docs/**"
       - "templates/**/DESIGN.md"
       - "examples/**/DESIGN.md"
       - "fixtures/**"
@@ -27,6 +41,8 @@ on:
       - "tests/**"
       - "package.json"
       - "playwright.config.mjs"
+      - ".github/dependabot.yml"
+      - ".github/pull_request_template.md"
       - ".github/workflows/contract-validation.yml"
 
 concurrency:
@@ -54,7 +70,7 @@ jobs:
             templates/dashboard/DESIGN.md \
             examples/sample-media/DESIGN.md \
             examples/sample-saas/DESIGN.md
-      - name: Run validator tests
+      - name: Run validator and release metadata tests
         run: python -m unittest discover -s tests -p "test_*.py" -v
 
   rendered-validation:
