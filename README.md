@@ -14,7 +14,7 @@
 - `DESIGN.md` remains the human-edited source
 - machine-readable JSON is generated from `DESIGN.md`; it is not maintained separately
 - P0 + P1 fixtures are renderable and CI-gated
-- browser-level validation uses desktop and mobile Chromium projects
+- browser-level validation uses desktop Chromium and a Pixel 7 mobile profile explicitly bound to Chromium
 
 See [`docs/v0.2-release-gate.md`](docs/v0.2-release-gate.md) for the exact release conditions.
 
@@ -135,7 +135,7 @@ Then run:
 npm run test:rendered
 ```
 
-The rendered suite exercises every P0/P1 fixture on desktop and mobile Chromium configurations. It checks document-level overflow plus fixture-specific geometry and accessibility-oriented conditions.
+The rendered suite exercises every P0/P1 fixture on desktop Chromium and a Pixel 7 mobile profile explicitly bound to Chromium. It checks document-level overflow plus fixture-specific geometry and accessibility-oriented conditions.
 
 ### 6. Review PASS / WARN / FAIL
 
@@ -217,7 +217,7 @@ It requires:
 Playwright renders the fixture set in:
 
 - desktop Chromium at 1440px width
-- a mobile Chromium project using the iPhone 15 device profile
+- a Pixel 7 mobile project explicitly using Chromium
 
 Common hard gate:
 
