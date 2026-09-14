@@ -1,0 +1,175 @@
+name: publish-v0.2.0
+
+on:
+  workflow_run:
+    workflows:
+      - contract-validation
+    types:
+      - completed
+
+concurrency:
+  group: publish-v0.2.0
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  publish:
+    if: >-
+      github.event.workflow_run.conclusion == 'success' &&
+      github.event.workflow_run.head_branch == 'main'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.workflow_run.head_sha }}
+          fetch-depth: 0
+
+      - name: Decide whether v0.2.0 should be published
+        id: gate
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          RELEASE_SHA: ${{ github.event.workflow_run.head_sha }}
+          TAG: v0.2.0
+        run: |
+          set -euo pipefail
+
+          version="$(tr -d '\r\n' < VERSION)"
+          if [ "$version" != "0.2.0" ]; then
+            echo "VERSION is $version, so v0.2.0 publication is not applicable."
+            echo "publish=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          test -f RELEASE_MANIFEST.json
+          test -f docs/releases/v0.2.0.md
+          test "$(jq -r '.version' RELEASE_MANIFEST.json)" = "0.2.0"
+          test "$(jq -r '.release_gate.release_candidate_rule' RELEASE_MANIFEST.json)" != "null"
+
+          release_status="$(curl -sS -o /tmp/release.json -w '%{http_code}' \
+            -H "Authorization: Bearer $GH_TOKEN" \
+            -H 'Accept: application/vnd.github+json' \
+            -H 'X-GitHub-Api-Version: 2022-11-28' \
+            "https://api.github.com/repos/$REPO/releases/tags/$TAG")"
+
+          if [ "$release_status" = "200" ]; then
+            echo "$TAG is already published; no-op."
+            jq -r '.html_url' /tmp/release.json
+            echo "publish=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          if [ "$release_status" != "404" ]; then
+            cat /tmp/release.json
+            echo "Unexpected release lookup status: $release_status" >&2
+            exit 1
+          fi
+
+          echo "publish=true" >> "$GITHUB_OUTPUT"
+          echo "release_sha=$RELEASE_SHA" >> "$GITHUB_OUTPUT"
+
+      - name: Create v0.2.0 tag and GitHub Release
+        if: steps.gate.outputs.publish == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          RELEASE_SHA: ${{ steps.gate.outputs.release_sha }}
+          TAG: v0.2.0
+          TITLE: v0.2.0 — executable contract validation
+        run: |
+          set -euo pipefail
+
+          ref_status="$(curl -sS -o /tmp/tag-ref.json -w '%{http_code}' \
+            -H "Authorization: Bearer $GH_TOKEN" \
+            -H 'Accept: application/vnd.github+json' \
+            -H 'X-GitHub-Api-Version: 2022-11-28' \
+            "https://api.github.com/repos/$REPO/git/ref/tags/$TAG")"
+
+          if [ "$ref_status" = "404" ]; then
+            jq -n --arg ref "refs/tags/$TAG" --arg sha "$RELEASE_SHA" \
+              '{ref: $ref, sha: $sha}' > /tmp/tag-create.json
+            create_status="$(curl -sS -o /tmp/tag-created.json -w '%{http_code}' \
+              -X POST \
+              -H "Authorization: Bearer $GH_TOKEN" \
+              -H 'Accept: application/vnd.github+json' \
+              -H 'X-GitHub-Api-Version: 2022-11-28' \
+              -H 'Content-Type: application/json' \
+              --data-binary @/tmp/tag-create.json \
+              "https://api.github.com/repos/$REPO/git/refs")"
+            if [ "$create_status" != "201" ]; then
+              cat /tmp/tag-created.json
+              echo "Failed to create tag ref: HTTP $create_status" >&2
+              exit 1
+            fi
+          elif [ "$ref_status" = "200" ]; then
+            existing_sha="$(jq -r '.object.sha' /tmp/tag-ref.json)"
+            if [ "$existing_sha" != "$RELEASE_SHA" ]; then
+              echo "Existing $TAG points to $existing_sha, expected $RELEASE_SHA" >&2
+              exit 1
+            fi
+          else
+            cat /tmp/tag-ref.json
+            echo "Unexpected tag lookup status: $ref_status" >&2
+            exit 1
+          fi
+
+          jq -n \
+            --arg tag "$TAG" \
+            --arg target "$RELEASE_SHA" \
+            --arg name "$TITLE" \
+            --rawfile body docs/releases/v0.2.0.md \
+            '{tag_name: $tag, target_commitish: $target, name: $name, body: $body, draft: false, prerelease: false, make_latest: "true"}' \
+            > /tmp/release-create.json
+
+          release_status="$(curl -sS -o /tmp/release-created.json -w '%{http_code}' \
+            -X POST \
+            -H "Authorization: Bearer $GH_TOKEN" \
+            -H 'Accept: application/vnd.github+json' \
+            -H 'X-GitHub-Api-Version: 2022-11-28' \
+            -H 'Content-Type: application/json' \
+            --data-binary @/tmp/release-create.json \
+            "https://api.github.com/repos/$REPO/releases")"
+
+          if [ "$release_status" != "201" ]; then
+            cat /tmp/release-created.json
+            echo "Failed to create GitHub Release: HTTP $release_status" >&2
+            exit 1
+          fi
+
+          jq -r '.html_url' /tmp/release-created.json
+
+      - name: Verify published release and tag
+        if: steps.gate.outputs.publish == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          RELEASE_SHA: ${{ steps.gate.outputs.release_sha }}
+          TAG: v0.2.0
+        run: |
+          set -euo pipefail
+
+          curl -fsS \
+            -H "Authorization: Bearer $GH_TOKEN" \
+            -H 'Accept: application/vnd.github+json' \
+            -H 'X-GitHub-Api-Version: 2022-11-28' \
+            "https://api.github.com/repos/$REPO/releases/tags/$TAG" \
+            > /tmp/release-verified.json
+
+          test "$(jq -r '.tag_name' /tmp/release-verified.json)" = "$TAG"
+          test "$(jq -r '.draft' /tmp/release-verified.json)" = "false"
+          test "$(jq -r '.prerelease' /tmp/release-verified.json)" = "false"
+
+          curl -fsS \
+            -H "Authorization: Bearer $GH_TOKEN" \
+            -H 'Accept: application/vnd.github+json' \
+            -H 'X-GitHub-Api-Version: 2022-11-28' \
+            "https://api.github.com/repos/$REPO/git/ref/tags/$TAG" \
+            > /tmp/tag-verified.json
+
+          tag_sha="$(jq -r '.object.sha' /tmp/tag-verified.json)"
+          test "$tag_sha" = "$RELEASE_SHA"
+
+          echo "Published: $(jq -r '.html_url' /tmp/release-verified.json)"
+          echo "Tag target: $tag_sha"
