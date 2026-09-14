@@ -19,7 +19,7 @@
 - 長い日本語input value
 - 複数ボタン
 - 長い確認アクション
-- 390px前後のmobile viewport
+- 400px前後のnarrow mobile viewport（CIではPixel 7 profile）
 
 ## PASS criteria
 
