@@ -2,7 +2,13 @@
 
 All notable changes to `jp-ui-contracts` are documented here.
 
-## [Unreleased] — v0.2 contract + rendered validation loop
+## [Unreleased]
+
+No queued changes after the v0.2.0 release candidate.
+
+## [0.2.0] — 2026-09-14 release candidate
+
+The release tag and GitHub Release are pending. The final tag must target the main commit that contains `VERSION`, `RELEASE_MANIFEST.json`, and these notes after the same release gates pass on that commit.
 
 ### Added
 
@@ -16,6 +22,7 @@ All notable changes to `jp-ui-contracts` are documented here.
 - `skills/japanese-ui-contract-review/SKILL.md`
 - GitHub Actions contract validation workflow
 - unit tests for parser and validator behavior
+- release metadata consistency tests for `VERSION`, `package.json`, and `RELEASE_MANIFEST.json`
 - fixture completeness gate for required P0/P1/P2 fixtures
 - executable P0 fixture pages and review criteria for:
   - long Japanese paragraphs
@@ -43,6 +50,8 @@ All notable changes to `jp-ui-contracts` are documented here.
   - Playwright HTML report
   - GitHub Actions artifact retention for 14 days
 - explicit [`docs/v0.2-release-gate.md`](docs/v0.2-release-gate.md)
+- [`docs/releases/v0.2.0.md`](docs/releases/v0.2.0.md) release notes
+- `RELEASE_MANIFEST.json` and root `VERSION`
 - weekly scheduled validation and manual `workflow_dispatch`
 - Dependabot version-update proposals for npm / Playwright and GitHub Actions
 - [`docs/maintenance.md`](docs/maintenance.md) low-touch maintenance loop
@@ -59,15 +68,25 @@ All notable changes to `jp-ui-contracts` are documented here.
 - corrected the mobile project from an iPhone descriptor that implicitly selected WebKit to a Chromium-bound Pixel 7 profile, keeping the declared browser gate aligned with installed CI dependencies
 - promoted `docs-prose-code` from a future P2 placeholder into the v0.2 required fixture set
 - shifted maintenance from ad hoc human memory toward scheduled drift detection plus reviewable dependency PRs
+- expanded CI path coverage so release metadata and documentation changes also execute the release gates
 
-### Not included yet
+### Compatibility
+
+- Existing `DESIGN.md` files remain the editable contract source.
+- Machine-readable JSON is generated and does not become a second file that users must maintain.
+- Adoption of the Python validator and rendered browser harness can be incremental.
+
+### Known non-goals
 
 - pixel-perfect screenshot baseline comparison
 - Firefox / WebKit release gating
 - automated visual-diff approval workflow
 - package / CLI distribution beyond direct Python invocation
 - hosted gallery / GitHub Pages
-- v0.2 release tag
+
+### Rollback
+
+The previous public release is `v0.1.0`.
 
 ## [0.1.0] — 2026-04-19
 
