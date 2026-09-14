@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Fixture: Japanese forms and IME errors</title>
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: system-ui, -apple-system, "Segoe UI", "Hiragino Sans", "Yu Gothic UI", "Yu Gothic", sans-serif; color: #202124; background: #f7f7f7; }
+  main { max-width: 620px; margin: 0 auto; padding: 32px 20px 64px; }
+  form { background: #fff; border: 1px solid #ddd; padding: 24px; }
+  .field { margin-bottom: 22px; }
+  label { display: block; font-size: .95rem; font-weight: 600; line-height: 1.5; margin-bottom: 7px; }
+  input, textarea { width: 100%; min-height: 44px; padding: 10px 12px; font: inherit; line-height: 1.5; border: 1px solid #888; border-radius: 4px; }
+  textarea { min-height: 112px; resize: vertical; }
+  .help, .error { margin: 6px 0 0; font-size: .85rem; line-height: 1.55; }
+  .help { color: #555; }
+  .error { color: #a01919; }
+  [aria-invalid="true"] { border-color: #a01919; }
+  .actions { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 10px; margin-top: 28px; }
+  button { min-height: 44px; padding: 8px 16px; font: inherit; line-height: 1.4; }
+  @media (max-width: 420px) { main { padding: 20px 12px 48px; } form { padding: 18px 14px; } .actions button { flex: 1 1 100%; } }
+</style>
+</head>
+<body>
+<main data-fixture="forms-ime-errors">
+  <h1>日本語フォームのラベル・補足・エラー・IME入力を確認する</h1>
+  <form>
+    <div class="field">
+      <label for="workspace">この設定を適用するワークスペース名</label>
+      <input id="workspace" name="workspace" value="日本語UI検証ワークスペース" autocomplete="off">
+      <p class="help">日本語入力中の変換候補が表示されても、ラベルや補足文と重ならないことを確認します。</p>
+    </div>
+    <div class="field">
+      <label for="policy">外部システムへ変更を書き込む前に、人間による承認を必須にする操作の説明</label>
+      <textarea id="policy" name="policy">顧客データを変更する操作では、実行前に担当者の承認を取得します。</textarea>
+      <p class="help">長い日本語ラベルとtextareaが狭い画面でも読みやすいことを確認します。</p>
+    </div>
+    <div class="field">
+      <label for="identifier">識別子</label>
+      <input id="identifier" name="identifier" value="顧客設定_本番環境" aria-invalid="true" aria-describedby="identifier-error">
+      <p class="error" id="identifier-error">半角英数字、ハイフン、アンダースコアのみ使用できます。入力内容を確認してください。</p>
+    </div>
+    <div class="actions">
+      <button type="button">変更を破棄する</button>
+      <button type="submit">設定を保存して承認依頼へ進む</button>
+    </div>
+  </form>
+</main>
+</body>
+</html>
