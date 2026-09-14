@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Fixture: mixed-script headings</title>
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: system-ui, -apple-system, "Segoe UI", "Hiragino Sans", "Yu Gothic UI", "Yu Gothic", sans-serif; color: #202124; }
+  main { max-width: 760px; margin: 0 auto; padding: 32px 20px 64px; }
+  section { border-bottom: 1px solid #ddd; padding: 20px 0; }
+  h1, h2 { line-break: strict; word-break: normal; overflow-wrap: anywhere; }
+  h1 { font-size: 2rem; line-height: 1.4; }
+  h2 { font-size: 1.45rem; line-height: 1.5; }
+  p { line-height: 1.75; }
+  @media (max-width: 420px) { main { padding: 20px 16px 48px; } h1 { font-size: 1.55rem; } h2 { font-size: 1.2rem; } }
+</style>
+</head>
+<body>
+<main data-fixture="mixed-script-headings">
+  <h1>日本語UIでAgent Runtimeを設計するとき、見出しの折り返しはどこで壊れるか</h1>
+  <section>
+    <h2>DESIGN.md ContractをProduction UIへ接続する</h2>
+    <p>英語の製品名やファイル名を含む見出しを確認します。</p>
+  </section>
+  <section>
+    <h2>API / CLI / Browserを操作単位で選ぶ</h2>
+    <p>スラッシュ区切りと日本語が混ざるケースです。</p>
+  </section>
+  <section>
+    <h2>LLM・RAG・MCPを含む長い技術見出しでも階層を保つ</h2>
+    <p>短い略語が連続しても、見出し全体のリズムが崩れないかを見ます。</p>
+  </section>
+  <section>
+    <h2>Customer Success向け設定画面で「自動Approve」を有効にする</h2>
+    <p>業務語と英単語が混ざる実務UIを想定しています。</p>
+  </section>
+</main>
+</body>
+</html>

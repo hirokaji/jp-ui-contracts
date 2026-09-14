@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Fixture: long Japanese paragraphs</title>
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: system-ui, -apple-system, "Segoe UI", "Hiragino Sans", "Yu Gothic UI", "Yu Gothic", sans-serif; color: #202124; background: #fff; }
+  main { max-width: 44em; margin: 0 auto; padding: 32px 20px 64px; }
+  h1 { font-size: 1.8rem; line-height: 1.45; }
+  p, blockquote { font-size: 1rem; line-height: 1.85; letter-spacing: normal; }
+  p { margin: 0 0 1.4em; }
+  blockquote { margin: 1.8em 0; padding-left: 1em; border-left: 3px solid #bbb; }
+  figcaption { font-size: .875rem; line-height: 1.65; }
+  @media (max-width: 480px) { main { padding: 24px 16px 48px; } h1 { font-size: 1.45rem; } }
+</style>
+</head>
+<body>
+<main data-fixture="long-paragraphs">
+  <h1>長い日本語本文でも、読み進めるリズムが崩れないかを確認する</h1>
+  <p>生成された画面は、見出しやカードだけを見ると整っているように見えても、実際の日本語本文を入れた瞬間に読みづらくなることがあります。行間が狭すぎる、本文へ不要な字間が入る、横幅が広すぎる、といった小さな判断が重なると、一文ごとの可読性よりも段落全体の負荷として現れます。このフィクスチャでは、短いダミーテキストでは見えにくい問題を、連続した文章で確認します。</p>
+  <p>日本語と英語が混ざる場面も避けません。たとえば AI Agent、DESIGN.md、runtime validation のような語が本文に入っても、その周辺だけ行送りや字面の密度が不自然にならないことを見ます。英数字だけをきれいに見せるための調整が、日本語の読みやすさを壊していないかも確認対象です。</p>
+  <blockquote>スクリーンショットで整って見えることと、実際に数分読み続けられることは同じではありません。長文は、契約の弱さが表面化しやすい検査面です。</blockquote>
+  <p>最後にモバイル幅でも確認します。画面が狭くなったときに一行が極端に短くなったり、行間まで縮められたりすると、デスクトップでは気づかなかった不安定さが出ます。幅を変えても段落の呼吸が保たれ、見出し、本文、引用、補足の役割が区別できることを合格の目安とします。</p>
+  <figure>
+    <figcaption>確認対象: 長文本文、和欧混植、引用、キャプション、モバイル幅。</figcaption>
+  </figure>
+</main>
+</body>
+</html>

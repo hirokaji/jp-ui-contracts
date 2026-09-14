@@ -1,0 +1,43 @@
+name: contract-validation
+
+on:
+  pull_request:
+    paths:
+      - "templates/**/DESIGN.md"
+      - "examples/**/DESIGN.md"
+      - "validators/contract.py"
+      - "schema/design-contract.schema.json"
+      - "tests/**"
+  push:
+    branches:
+      - main
+    paths:
+      - "templates/**/DESIGN.md"
+      - "examples/**/DESIGN.md"
+      - "validators/contract.py"
+      - "schema/design-contract.schema.json"
+      - "tests/**"
+
+permissions:
+  contents: read
+
+jobs:
+  validate-contracts:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Validate shipped templates and examples
+        run: |
+          python validators/contract.py validate --strict \
+            templates/base/DESIGN.md \
+            templates/media/DESIGN.md \
+            templates/saas/DESIGN.md \
+            templates/docs/DESIGN.md \
+            templates/dashboard/DESIGN.md \
+            examples/sample-media/DESIGN.md \
+            examples/sample-saas/DESIGN.md
+      - name: Run validator tests
+        run: python -m unittest discover -s tests -p "test_*.py" -v

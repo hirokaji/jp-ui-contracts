@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Fixture: long URL overflow</title>
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: system-ui, -apple-system, "Segoe UI", "Hiragino Sans", "Yu Gothic UI", "Yu Gothic", sans-serif; color: #202124; }
+  main { max-width: 700px; margin: 0 auto; padding: 32px 20px 64px; }
+  p, li { line-height: 1.75; }
+  a, code, .token { overflow-wrap: anywhere; word-break: normal; }
+  .card { max-width: 360px; border: 1px solid #ccc; padding: 16px; margin: 24px 0; }
+  .tag { display: inline-block; max-width: 100%; padding: 4px 8px; border: 1px solid #bbb; }
+  @media (max-width: 420px) { main { padding: 20px 16px 48px; } }
+</style>
+</head>
+<body>
+<main data-fixture="long-url-overflow">
+  <h1>URLと長い英数字tokenが日本語UIを押し広げないか</h1>
+  <p>本文中URL: <a href="#">https://example.com/products/japanese-ui-contract-validation/runtime-projection?profile=media&amp;source=design-md&amp;mode=review</a></p>
+  <div class="card">
+    <strong>カード内URL</strong>
+    <p><a href="#">https://docs.example.com/reference/agent-runtime/contract-validation/very-long-resource-identifier-2026</a></p>
+  </div>
+  <p>長い英単語: <span class="token">JapaneseInterfaceContractValidationAndRegressionWorkflow</span></p>
+  <p>機械的なID: <code>contract_evidence_01JAPANESEUIRUNTIMEVALIDATION0000000001</code></p>
+  <p><span class="tag">customer-success-production-runtime-validation-policy</span></p>
+</main>
+</body>
+</html>
