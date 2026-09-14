@@ -4,11 +4,13 @@ All notable changes to `jp-ui-contracts` are documented here.
 
 ## [Unreleased]
 
-No queued changes after the v0.2.0 release candidate.
+No queued changes after the v0.2.0 release.
 
-## [0.2.0] — 2026-09-14 release candidate
+## [0.2.0] — 2026-09-14
 
-The release tag and GitHub Release are pending. The final tag must target the main commit that contains `VERSION`, `RELEASE_MANIFEST.json`, and these notes after the same release gates pass on that commit.
+Published as [`v0.2.0 — executable contract validation`](https://github.com/hirokaji/jp-ui-contracts/releases/tag/v0.2.0).
+
+Release tag target: `ba4f44c65b18c27ba784d9171a80859f798c5c89`.
 
 ### Added
 
