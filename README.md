@@ -5,14 +5,18 @@
 
 `jp-ui-contracts` は、日本語UIをAIエージェントやコード生成ツールへ任せるための **design contract + validation kit** です。
 
-公開サイトを大量に収集する見本帳ではありません。日本語本文、和欧混植、改行、フォーム密度、表、モバイル幅のような壊れやすい条件を、**契約 → 生成 → 検証 → 契約修正**のループとして扱います。
+公開サイトを大量に収集する見本帳ではありません。日本語本文、和欧混植、改行、フォーム密度、表、モバイル幅のような壊れやすい条件を、**契約 → 生成 → 検証 → Evidence → 契約修正**のループとして扱います。
 
 ## Status
 
 - Latest release: `v0.1.0 — public preview`
-- `v0.2`: contract validation loop in development
+- `v0.2`: release-gate implementation in progress
 - `DESIGN.md` remains the human-edited source
 - machine-readable JSON is generated from `DESIGN.md`; it is not maintained separately
+- P0 + P1 fixtures are renderable and CI-gated
+- browser-level validation uses desktop and mobile Chromium projects
+
+See [`docs/v0.2-release-gate.md`](docs/v0.2-release-gate.md) for the exact release conditions.
 
 ## What this repository provides
 
@@ -20,10 +24,12 @@
 - context profiles: `base`, `media`, `saas`, `docs`, `dashboard`
 - Japanese typography and overflow CSS recipes
 - reusable failure fixtures
-- PASS / WARN / FAIL review scorecard
+- PASS / WARN / FAIL review criteria
 - executable zero-dependency contract validator
 - JSON projection for CI and agents
 - an agent skill for contract-driven UI review
+- browser-level rendered validation with Playwright
+- screenshot and render-metric Evidence from CI
 - GitHub Actions validation on pull requests
 - Issue Forms for broken outputs and profile gaps
 
@@ -45,16 +51,18 @@ AI / code generation
    ↓
 rendered UI
    ↓
-fixture + validator + human review
+fixture + static validator + browser gate + human review
    ↓
 PASS / WARN / FAIL
+   ↓
+Evidence: screenshot / geometry / trace / report
    ↓
 missing rule | weak default | fixture gap | validator gap | implementation bug
    ↓
 return the change to the owning layer
 ```
 
-The important unit is not a screenshot. It is a failure that can be reproduced, attributed, and prevented from returning.
+The important unit is not a pretty screenshot. It is a failure that can be reproduced, attributed, evidenced, and prevented from returning.
 
 ---
 
@@ -112,18 +120,37 @@ python validators/contract.py export DESIGN.md -o design-contract.json
 
 Give the active `DESIGN.md` to the coding agent before visual implementation. Add only the CSS recipes required by the project.
 
-### 5. Run fixtures and review
+### 5. Run the rendered fixtures
 
-Start with the fixture that matches the risk:
+Install the pinned Playwright test dependency and Chromium once:
+
+```bash
+npm install
+npx playwright install chromium
+```
+
+Then run:
+
+```bash
+npm run test:rendered
+```
+
+The rendered suite exercises every P0/P1 fixture on desktop and mobile Chromium configurations. It checks document-level overflow plus fixture-specific geometry and accessibility-oriented conditions.
+
+### 6. Review PASS / WARN / FAIL
+
+Current implemented fixtures:
 
 - [`fixtures/long-paragraphs/`](fixtures/long-paragraphs/) — sustained Japanese reading
 - [`fixtures/mixed-script-headings/`](fixtures/mixed-script-headings/) — Japanese + English headings
 - [`fixtures/long-url-overflow/`](fixtures/long-url-overflow/) — URLs and long machine tokens
 - [`fixtures/forms-ime-errors/`](fixtures/forms-ime-errors/) — Japanese labels, IME, help, error, actions
+- [`fixtures/dense-tables/`](fixtures/dense-tables/) — dense Japanese tables and local overflow containment
+- [`fixtures/mobile-wrap-stress/`](fixtures/mobile-wrap-stress/) — narrow viewport wrapping and minimum action size
 
-Use [`validators/scorecard.md`](validators/scorecard.md) to classify the result as PASS / WARN / FAIL.
+Use each fixture README and [`validators/scorecard.md`](validators/scorecard.md) to classify the result as PASS / WARN / FAIL.
 
-### 6. Return failures to the contract
+### 7. Return failures to the owning layer
 
 Every WARN / FAIL should be attributed to one primary bucket:
 
@@ -146,10 +173,11 @@ Do not accumulate one-off CSS patches when the real problem belongs in the contr
 3. identify profile and validation targets
 4. generate or revise the UI
 5. exercise the relevant fixtures
-6. score PASS / WARN / FAIL
-7. attribute the failure
-8. fix the owning layer
-9. re-run validation and report evidence
+6. run rendered checks when available
+7. score PASS / WARN / FAIL
+8. attribute the failure
+9. fix the owning layer
+10. re-run validation and report Evidence
 
 The skill is deliberately tool-neutral. It can be adapted to coding agents that can read repository files, execute commands, and inspect rendered UI.
 
@@ -157,7 +185,7 @@ The skill is deliberately tool-neutral. It can be adapted to coding agents that 
 
 ## Validation model
 
-### Static validation
+### 1. Static contract validation
 
 The executable validator checks machine-readable contract basics and hard rules that are safe to automate.
 
@@ -172,19 +200,38 @@ Current checks include:
 
 The parser also exports selected Contract Metadata to JSON using [`schema/design-contract.schema.json`](schema/design-contract.schema.json).
 
-### Visual validation
+### 2. Fixture completeness validation
 
-Not every UI property should be reduced to static lint. Rendered output still needs review against realistic stress cases.
+`tests/test_fixture_manifest.py` prevents P0/P1 fixtures from silently regressing to placeholders.
 
-Examples:
+It requires:
 
-- long Japanese paragraphs remain readable
-- Japanese-English headings wrap naturally
-- long URLs do not destroy layout or paragraph rhythm
-- form labels, helper text, errors, and IME states remain usable
-- mobile width does not reveal hidden overflow
+- a renderable `index.html`
+- Japanese page language
+- stable fixture identity
+- completed PASS / WARN / FAIL criteria
+- no remaining `TBD` in required P0/P1 fixture criteria
 
-The repository treats visual review as evidence that feeds contract improvement, not as a replacement for the contract.
+### 3. Rendered browser validation
+
+Playwright renders the fixture set in:
+
+- desktop Chromium at 1440px width
+- a mobile Chromium project using the iPhone 15 device profile
+
+Common hard gate:
+
+- no document-level horizontal overflow
+
+Fixture-specific gates currently include:
+
+- dense tables keep wide overflow inside the table wrapper
+- forms expose labels, helper text, errors, and controls correctly
+- mobile-marked actions preserve at least 44px target height
+
+Every common rendered test captures a full-page screenshot and JSON render metrics. Failed browser runs retain Playwright trace Evidence.
+
+Rendered validation does not yet mean pixel-perfect visual regression. It verifies structural rendering properties and leaves aesthetic judgment to the scorecard and human review.
 
 ---
 
@@ -192,14 +239,14 @@ The repository treats visual review as evidence that feeds contract improvement,
 
 The fixture strategy intentionally focuses on **failure modes**, not brands.
 
-### P0 — implemented
+### P0 — implemented and CI-gated
 
 - `long-paragraphs`
 - `mixed-script-headings`
 - `long-url-overflow`
 - `forms-ime-errors`
 
-### P1 — next
+### P1 — implemented and CI-gated
 
 - `dense-tables`
 - `mobile-wrap-stress`
@@ -219,6 +266,8 @@ jp-ui-contracts/
 ├─ README.md
 ├─ CHANGELOG.md
 ├─ CONTRIBUTING.md
+├─ package.json
+├─ playwright.config.mjs
 ├─ docs/
 ├─ templates/
 ├─ recipes/
@@ -231,6 +280,7 @@ jp-ui-contracts/
 ├─ skills/
 ├─ examples/
 ├─ tests/
+│  └─ rendered/
 └─ .github/workflows/
 ```
 
@@ -238,14 +288,24 @@ jp-ui-contracts/
 
 ## CI
 
-Pull requests that change contracts, the validator, schema, or tests run:
+Pull requests run two independent validation jobs.
+
+### Contract validation
 
 ```bash
 python validators/contract.py validate --strict ...
 python -m unittest discover -s tests -p "test_*.py" -v
 ```
 
-This is the first step toward treating Japanese UI rules as regression-testable contracts rather than prose that is read once and forgotten.
+### Rendered validation
+
+```bash
+npm install
+npx playwright install --with-deps chromium
+npm run test:rendered
+```
+
+The rendered job uploads a `rendered-validation-evidence` artifact containing `test-results/` and the Playwright HTML report. CI Evidence is currently retained for 14 days.
 
 ---
 
@@ -260,21 +320,23 @@ A useful broken-output report should be promotable into a fixture or validator c
 
 ---
 
-## v0.2 direction
+## v0.2 release direction
 
-The goal of v0.2 is not to increase the number of collected designs. It is to close this loop:
+The target of v0.2 is to close this loop:
 
 ```text
-contract → generation → validation → evidence → contract update
+contract → generation → static validation → rendered validation → evidence → contract update
 ```
 
-Near-term work:
+The release decision is governed by [`docs/v0.2-release-gate.md`](docs/v0.2-release-gate.md).
 
-1. stabilize the executable validator and JSON projection
-2. complete P0 fixture coverage
-3. add P1 fixtures for dense tables and mobile wrapping
-4. connect rendered regression evidence to pull requests
-5. improve profile-specific validation without creating a second source of truth
+Current post-gate extensions include:
+
+1. implement the P2 `docs-prose-code` fixture
+2. decide whether cross-browser Firefox / WebKit checks should become a later hard gate
+3. evaluate pixel-baseline comparison separately from structural rendered checks
+4. improve profile-specific semantic validation
+5. add a hosted visual surface only if it helps review rather than turning the project into a catalog
 
 See [`CHANGELOG.md`](CHANGELOG.md) for implemented changes.
 
@@ -292,4 +354,4 @@ Copy `templates/base/DESIGN.md` or the closest profile, define the validation ta
 python validators/contract.py validate DESIGN.md
 ```
 
-The target is not a perfect first generation. The target is a UI contract that can explain a failure and prevent the same failure from returning.
+The target is not a perfect first generation. The target is a UI contract that can explain a failure, preserve Evidence, and prevent the same failure from returning.
