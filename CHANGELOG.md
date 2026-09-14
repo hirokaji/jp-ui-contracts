@@ -43,6 +43,11 @@ All notable changes to `jp-ui-contracts` are documented here.
   - Playwright HTML report
   - GitHub Actions artifact retention for 14 days
 - explicit [`docs/v0.2-release-gate.md`](docs/v0.2-release-gate.md)
+- weekly scheduled validation and manual `workflow_dispatch`
+- Dependabot version-update proposals for npm / Playwright and GitHub Actions
+- [`docs/maintenance.md`](docs/maintenance.md) low-touch maintenance loop
+- root [`AGENTS.md`](AGENTS.md) repository contract for coding agents
+- evidence-oriented pull request template
 
 ### Changed
 
@@ -53,6 +58,7 @@ All notable changes to `jp-ui-contracts` are documented here.
 - extended the core loop from static contract checks to rendered browser Evidence
 - corrected the mobile project from an iPhone descriptor that implicitly selected WebKit to a Chromium-bound Pixel 7 profile, keeping the declared browser gate aligned with installed CI dependencies
 - promoted `docs-prose-code` from a future P2 placeholder into the v0.2 required fixture set
+- shifted maintenance from ad hoc human memory toward scheduled drift detection plus reviewable dependency PRs
 
 ### Not included yet
 
