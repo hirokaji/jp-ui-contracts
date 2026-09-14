@@ -1,0 +1,13 @@
+{
+  "name": "jp-ui-contracts",
+  "version": "0.2.0-dev",
+  "private": true,
+  "description": "Rendered validation harness for Japanese UI design contracts.",
+  "scripts": {
+    "test:rendered": "playwright test",
+    "test:rendered:headed": "playwright test --headed"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.63.0"
+  }
+}

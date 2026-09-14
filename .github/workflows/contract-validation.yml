@@ -5,18 +5,26 @@ on:
     paths:
       - "templates/**/DESIGN.md"
       - "examples/**/DESIGN.md"
+      - "fixtures/**"
       - "validators/contract.py"
       - "schema/design-contract.schema.json"
       - "tests/**"
+      - "package.json"
+      - "playwright.config.mjs"
+      - ".github/workflows/contract-validation.yml"
   push:
     branches:
       - main
     paths:
       - "templates/**/DESIGN.md"
       - "examples/**/DESIGN.md"
+      - "fixtures/**"
       - "validators/contract.py"
       - "schema/design-contract.schema.json"
       - "tests/**"
+      - "package.json"
+      - "playwright.config.mjs"
+      - ".github/workflows/contract-validation.yml"
 
 permissions:
   contents: read
@@ -41,3 +49,30 @@ jobs:
             examples/sample-saas/DESIGN.md
       - name: Run validator tests
         run: python -m unittest discover -s tests -p "test_*.py" -v
+
+  rendered-validation:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install Playwright test runner
+        run: npm install --ignore-scripts --no-audit --no-fund
+      - name: Install Chromium and system dependencies
+        run: npx playwright install --with-deps chromium
+      - name: Run rendered UI gates
+        run: npm run test:rendered
+      - name: Upload rendered validation evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: rendered-validation-evidence
+          path: |
+            test-results/
+            playwright-report/
+          if-no-files-found: warn
+          retention-days: 14
