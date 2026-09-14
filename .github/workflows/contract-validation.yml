@@ -23,6 +23,7 @@ on:
       - ".github/dependabot.yml"
       - ".github/pull_request_template.md"
       - ".github/workflows/contract-validation.yml"
+      - ".github/workflows/publish-v0.2.0.yml"
   push:
     branches:
       - main
@@ -44,6 +45,7 @@ on:
       - ".github/dependabot.yml"
       - ".github/pull_request_template.md"
       - ".github/workflows/contract-validation.yml"
+      - ".github/workflows/publish-v0.2.0.yml"
 
 concurrency:
   group: contract-validation-${{ github.ref }}
