@@ -1,65 +1,45 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "title": "Design Contract Schema",
-  "description": "Foundational schema for structured exports of a Japanese UI design contract.",
+  "$id": "https://github.com/hirokaji/jp-ui-contracts/schema/design-contract.schema.json",
+  "title": "jp-ui-contracts Design Contract Projection",
+  "description": "Machine-readable projection exported from DESIGN.md. DESIGN.md remains the human-edited source.",
   "type": "object",
+  "additionalProperties": false,
   "properties": {
-    "locale": {
-      "type": "string",
-      "examples": [
-        "ja-JP"
-      ]
-    },
+    "$schema": {"type": "string"},
+    "schemaVersion": {"type": "string", "const": "0.2.0"},
+    "source": {"type": "string", "minLength": 1},
+    "locale": {"type": "string", "const": "ja-JP"},
     "profile": {
       "type": "string",
-      "enum": [
-        "base",
-        "media",
-        "saas",
-        "docs",
-        "dashboard"
-      ]
+      "enum": ["base", "media", "saas", "docs", "dashboard"]
     },
     "reviewStatus": {
       "type": "string",
-      "enum": [
-        "draft",
-        "verified",
-        "production"
-      ]
+      "enum": ["draft", "verified", "production"]
     },
-    "typography": {
-      "type": "object",
-      "properties": {
-        "bodyLineHeight": {
-          "type": [
-            "number",
-            "string"
-          ]
-        },
-        "bodyLetterSpacing": {
-          "type": "string"
-        },
-        "fontStack": {
-          "type": "string"
-        }
-      },
-      "additionalProperties": true
-    },
-    "layout": {
-      "type": "object",
-      "additionalProperties": true
-    },
+    "writingMode": {"type": "string"},
+    "targetSurfaces": {"type": "string"},
+    "lastReviewedAt": {"type": "string"},
+    "reviewer": {"type": "string"},
     "validationTargets": {
       "type": "array",
-      "items": {
-        "type": "string"
-      }
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {"type": "string", "minLength": 1}
+    },
+    "warnings": {
+      "type": "array",
+      "items": {"type": "string"}
     }
   },
   "required": [
+    "$schema",
+    "schemaVersion",
+    "source",
     "locale",
     "profile",
-    "reviewStatus"
+    "reviewStatus",
+    "validationTargets"
   ]
 }
