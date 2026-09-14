@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mobile wrap stress fixture</title>
+  <style>
+    * { box-sizing: border-box; }
+    html { line-break: strict; word-break: normal; overflow-wrap: anywhere; }
+    body {
+      margin: 0;
+      color: #171717;
+      background: #f5f5f5;
+      font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Yu Gothic UI", Meiryo, sans-serif;
+      line-height: 1.6;
+    }
+    main { width: min(100% - 24px, 760px); margin: 28px auto 64px; }
+    h1 { margin: 0 0 10px; font-size: clamp(24px, 8vw, 38px); line-height: 1.35; overflow-wrap: normal; }
+    .lead { margin: 0 0 24px; color: #555; }
+    .stack { display: grid; gap: 16px; }
+    .card, .dialog, .form-panel {
+      min-width: 0;
+      background: #fff;
+      border: 1px solid #ddd;
+      border-radius: 12px;
+      padding: 18px;
+    }
+    .card h2, .dialog h2, .form-panel h2 { margin: 0 0 8px; font-size: 20px; line-height: 1.45; }
+    .meta { color: #666; font-size: 13px; }
+    .actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 16px; }
+    button, a.action {
+      min-height: 44px;
+      min-width: 44px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 10px 14px;
+      border: 1px solid #999;
+      border-radius: 8px;
+      background: #fff;
+      color: inherit;
+      font: inherit;
+      text-decoration: none;
+      line-height: 1.35;
+      white-space: normal;
+    }
+    .primary { background: #171717; color: #fff; border-color: #171717; }
+    label { display: block; font-weight: 700; margin-bottom: 6px; }
+    input { width: 100%; min-width: 0; min-height: 44px; padding: 10px 12px; border: 1px solid #aaa; border-radius: 8px; font: inherit; }
+    .helper { margin: 6px 0 0; color: #666; font-size: 13px; }
+    .long-token { display: block; max-width: 100%; overflow-wrap: anywhere; word-break: normal; }
+    @media (max-width: 420px) {
+      main { width: min(100% - 20px, 760px); margin-top: 18px; }
+      .card, .dialog, .form-panel { padding: 15px; }
+      .actions { display: grid; grid-template-columns: 1fr; }
+      button, a.action { width: 100%; }
+    }
+  </style>
+</head>
+<body data-fixture="mobile-wrap-stress">
+  <main>
+    <h1>AI Agent Runtimeの運用設定をモバイルで確認する</h1>
+    <p class="lead">長い日本語見出し、英語製品名、操作ボタン、フォーム、長い識別子が狭幅で同時に現れるケースです。</p>
+
+    <div class="stack">
+      <section class="card">
+        <h2>Customer Support Knowledge Sync の更新状態</h2>
+        <p>日本語と英語が混ざった見出しが、狭い画面で不自然に欠けたり、カード幅を押し広げたりしないことを確認します。</p>
+        <span class="meta long-token">trace_01JXK8YFQ74N0Z9K6M2S8A3C1EXAMPLE-LONG-IDENTIFIER</span>
+        <div class="actions">
+          <button type="button" data-min-tap>詳細を確認</button>
+          <button type="button" class="primary" data-min-tap>再評価を実行</button>
+        </div>
+      </section>
+
+      <section class="form-panel">
+        <h2>通知先の更新</h2>
+        <label for="channel">通知チャネル名</label>
+        <input id="channel" value="品質保証チーム・重大インシデント通知">
+        <p class="helper">長い日本語入力値でも、入力欄がviewportを押し広げないことを確認します。</p>
+      </section>
+
+      <section class="dialog" aria-label="確認ダイアログの例">
+        <h2>この変更をProductionへ反映しますか？</h2>
+        <p>反映後は監視ルールが更新されます。影響範囲を確認してから続行してください。</p>
+        <div class="actions">
+          <button type="button" data-min-tap>キャンセル</button>
+          <a class="action primary" href="#" data-min-tap>変更内容を確認して反映</a>
+        </div>
+      </section>
+    </div>
+  </main>
+</body>
+</html>
