@@ -1,287 +1,282 @@
 # jp-ui-contracts
 
-> Japanese UI design contracts for AI builders.  
-> `DESIGN.md` templates, CSS recipes, and validation rules for Japanese interfaces.
+> Japanese UI contract & validation kit for AI agents.  
+> Write the design intent in `DESIGN.md`, generate the UI, validate the result, and return failures to the contract.
 
-`jp-ui-contracts` は、日本語UI向けの **design contract kit** です。  
-公開サイトの見た目を収集する「見本集」ではなく、AIエージェントやコード生成ツールが **日本語本文・見出し・和欧混植・改行・フォーム密度** を壊しにくくするための、**契約テンプレート / CSS recipe / review rule** をまとめたリポジトリです。
+`jp-ui-contracts` は、日本語UIをAIエージェントやコード生成ツールへ任せるための **design contract + validation kit** です。
 
----
+公開サイトを大量に収集する見本帳ではありません。日本語本文、和欧混植、改行、フォーム密度、表、モバイル幅のような壊れやすい条件を、**契約 → 生成 → 検証 → 契約修正**のループとして扱います。
 
-## このrepoがやること
+## Status
 
-- 日本語UI向け `DESIGN.md` テンプレートを提供する
-- 用途別の profile を提供する
-  - `base`
-  - `media`
-  - `saas`
-  - `docs`
-  - `dashboard`
-- 日本語組版向けの CSS recipe を提供する
-- AI生成UIを見直す validator を提供する
-- `DESIGN.md` と preview を往復しやすくするサンプルを提供する
+- Latest release: `v0.1.0 — public preview`
+- `v0.2`: contract validation loop in development
+- `DESIGN.md` remains the human-edited source
+- machine-readable JSON is generated from `DESIGN.md`; it is not maintained separately
 
-## このrepoがやらないこと
+## What this repository provides
 
-- 公開サイトの完全模写
-- ブランド見本帳の拡張
-- 日本語組版の唯一絶対ルールの断定
-- プロンプトだけで画面品質を保証すること
+- `DESIGN.md` templates for Japanese UI
+- context profiles: `base`, `media`, `saas`, `docs`, `dashboard`
+- Japanese typography and overflow CSS recipes
+- reusable failure fixtures
+- PASS / WARN / FAIL review scorecard
+- executable zero-dependency contract validator
+- JSON projection for CI and agents
+- an agent skill for contract-driven UI review
+- GitHub Actions validation on pull requests
+- Issue Forms for broken outputs and profile gaps
 
----
+## What this repository does not try to be
 
-## なぜ必要か
-
-日本語UIは、色・角丸・余白だけでは品質が出ません。  
-問題になりやすいのは、むしろ次の層です。
-
-- 和文フォントの fallback が曖昧
-- 和欧混植時の違和感
-- 本文と見出しで分けるべき line-height の未分離
-- 本文への過剰な letter-spacing
-- `word-break: break-all` の乱用
-- URL や英単語のはみ出し
-- 表やフォームが本文ルールをそのまま引きずること
-
-このrepoは、それらを「感覚」ではなく、**AIが読める契約**として扱います。
+- a catalog of copied brand designs
+- a ranking of Japanese websites
+- one universal typography rule for every Japanese interface
+- a promise that a prompt alone guarantees UI quality
 
 ---
 
-## 設計原則
+## Core loop
 
-### 1. Contract first
-毎回のプロンプトで見た目を説明するのではなく、プロジェクト側に契約を置きます。
+```text
+DESIGN.md
+   ↓
+AI / code generation
+   ↓
+rendered UI
+   ↓
+fixture + validator + human review
+   ↓
+PASS / WARN / FAIL
+   ↓
+missing rule | weak default | fixture gap | validator gap | implementation bug
+   ↓
+return the change to the owning layer
+```
 
-### 2. Context-aware defaults
-日本語UIは一枚岩ではありません。  
-記事メディア、SaaS、技術文書、ダッシュボードでは、密度も行間も改行戦略も変わります。
-
-### 3. Mixed-script safety
-日本語だけ、英語だけではなく、**日本語と英語が混ざった状態で成立すること**を重視します。
-
-### 4. Progressive enhancement
-新しいCSS機能は活かしつつ、未対応環境で壊れない設計を優先します。
-
-### 5. Human review before canonization
-スクリーンショットがきれいでも終わりません。  
-実際に読む、詰める、入力する、折り返す、を確認してから採用します。
+The important unit is not a screenshot. It is a failure that can be reproduced, attributed, and prevented from returning.
 
 ---
 
 ## Profiles
 
-| Profile | 向いているもの | 重点 |
+| Profile | Best for | Main concern |
 |---|---|---|
-| `base` | 最小共通契約 | locale / typography / validation の基礎 |
-| `media` | note、ブログ、オウンドメディア | 段落の呼吸、記事のリズム |
-| `saas` | 管理画面、設定画面、B2Bツール | 密度、ラベル、フォーム安定 |
-| `docs` | 技術文書、ヘルプ、ナレッジ | 本文とコードの両立 |
-| `dashboard` | KPI画面、監視画面、分析UI | 走査性、表、数値、カード密度 |
-
----
-
-## Directory structure
-
-```text
-jp-ui-contracts/
-├─ README.md
-├─ LICENSE
-├─ CONTRIBUTING.md
-├─ docs/
-├─ templates/
-├─ recipes/
-├─ validators/
-├─ schema/
-└─ examples/
-```
-
-- `templates/`: 複製して使う `DESIGN.md`
-- `recipes/`: 日本語UI向け CSS 断片
-- `validators/`: AI生成UIの見直しルール
-- `docs/`: 設計思想と使い分け
-- `schema/`: 将来の機械検証向けスキーマ
-- `examples/`: サンプル `DESIGN.md` と `preview.html`
+| `base` | minimal shared contract | locale / typography / validation |
+| `media` | articles, blogs, owned media | long-form reading rhythm |
+| `saas` | admin, settings, B2B tools | labels / forms / stable density |
+| `docs` | technical docs, help, knowledge | prose + code + tables |
+| `dashboard` | KPI, monitoring, analytics | scanning / tables / metrics |
 
 ---
 
 ## Quick start
 
-### 1. template を選ぶ
+### 1. Choose a template
 
-最初は次のどれかを複製します。
+Copy one of:
 
-- `templates/base/DESIGN.md`
-- `templates/media/DESIGN.md`
-- `templates/saas/DESIGN.md`
-- `templates/docs/DESIGN.md`
-- `templates/dashboard/DESIGN.md`
-
-### 2. ブランド情報を埋める
-
-- 色
-- フォント
-- 余白
-- コンポーネント方針
-- 禁止事項
-- validation target
-
-を埋めます。
-
-### 3. recipe を追加する
-
-`recipes/` の CSS を必要なものだけ導入します。
-
-### 4. validator で見る
-
-`validators/` のチェックリストと lint ルールで見直します。
-
-### 5. preview を作る
-
-契約だけで終わらせず、最小の `preview.html` を作って確認します。
-
----
-
-## Recommended workflow
-
-1. `DESIGN.md` を書く  
-2. AIにUIを生成させる  
-3. preview を見る  
-4. validator で差分を記録する  
-5. 契約へ戻して修正する  
-6. 再生成する  
-
-このrepoは、1回で当てるためのものではありません。  
-**契約 → 生成 → 目視 → 契約修正** のループを速くするためのものです。
-
----
-
-## Example usage
-
-- 記事メディアなら `templates/media/DESIGN.md`
-- 管理画面なら `templates/saas/DESIGN.md`
-- 技術文書なら `templates/docs/DESIGN.md`
-- 高密度BI画面なら `templates/dashboard/DESIGN.md`
-
-サンプルは `examples/` に入っています。  
-ブラウザで直接 `preview.html` を開くか、ローカルサーバーを立てて確認してください。
-
-```bash
-python -m http.server 8000
+```text
+templates/base/DESIGN.md
+templates/media/DESIGN.md
+templates/saas/DESIGN.md
+templates/docs/DESIGN.md
+templates/dashboard/DESIGN.md
 ```
 
-その後、`http://localhost:8000/examples/sample-media/preview.html` のように開けます。
+Fill in the project-specific design intent, typography, component rules, prohibited patterns, and validation targets.
+
+### 2. Validate the contract
+
+No Python package install is required.
+
+```bash
+python validators/contract.py validate DESIGN.md
+```
+
+For repository-level checks:
+
+```bash
+python validators/contract.py validate --strict templates/*/DESIGN.md
+```
+
+### 3. Export a machine-readable projection
+
+```bash
+python validators/contract.py export DESIGN.md -o design-contract.json
+```
+
+`DESIGN.md` is still the editable source. The JSON is a projection for CI, agents, and other tools.
+
+### 4. Generate or revise the UI
+
+Give the active `DESIGN.md` to the coding agent before visual implementation. Add only the CSS recipes required by the project.
+
+### 5. Run fixtures and review
+
+Start with the fixture that matches the risk:
+
+- [`fixtures/long-paragraphs/`](fixtures/long-paragraphs/) — sustained Japanese reading
+- [`fixtures/mixed-script-headings/`](fixtures/mixed-script-headings/) — Japanese + English headings
+- [`fixtures/long-url-overflow/`](fixtures/long-url-overflow/) — URLs and long machine tokens
+- [`fixtures/forms-ime-errors/`](fixtures/forms-ime-errors/) — Japanese labels, IME, help, error, actions
+
+Use [`validators/scorecard.md`](validators/scorecard.md) to classify the result as PASS / WARN / FAIL.
+
+### 6. Return failures to the contract
+
+Every WARN / FAIL should be attributed to one primary bucket:
+
+- missing contract rule
+- weak profile default
+- missing fixture
+- validator gap
+- implementation bug
+
+Do not accumulate one-off CSS patches when the real problem belongs in the contract or profile.
 
 ---
 
-## Roadmap
+## Agent skill
 
-- `design-contract.schema.json` の拡充
-- preview サンプルの増加
-- validator の半自動化
-- mixed-script review の強化
-- mobile / desktop の別基準追加
-- 日本語フォームUI、表UI、ナビゲーションUIの細分化
+[`skills/japanese-ui-contract-review/SKILL.md`](skills/japanese-ui-contract-review/SKILL.md) defines a reusable workflow for AI agents:
 
----
+1. read the contract
+2. statically validate it
+3. identify profile and validation targets
+4. generate or revise the UI
+5. exercise the relevant fixtures
+6. score PASS / WARN / FAIL
+7. attribute the failure
+8. fix the owning layer
+9. re-run validation and report evidence
 
-- ## What to improve next
-
-`jp-ui-contracts` is not just a template collection.  
-The next step is to make the contract more testable, more comparable, and easier to improve from real-world failures.
-
-In the short term, this repository will evolve in four directions:
-
-1. **Stronger contract structure**  
-   Make `DESIGN.md` easier to lint and compare by clarifying required fields, validation targets, and profile-specific overlays.
-
-2. **Validation-first workflow**  
-   Treat generated UI as reviewable output. The goal is not one-shot perfection, but a stable loop of contract → generation → review → contract update.
-
-3. **Reusable fixtures**  
-   Build a shared set of failure-prone Japanese UI cases such as long paragraphs, mixed-script headings, long URLs, tables, forms, and mobile wrapping.
-
-4. **Community feedback intake**  
-   Convert stars and reactions into actionable issue reports and profile gap requests.
+The skill is deliberately tool-neutral. It can be adapted to coding agents that can read repository files, execute commands, and inspect rendered UI.
 
 ---
 
 ## Validation model
 
-This repository uses a two-layer validation model.
+### Static validation
 
-### 1. Static validation
-Check whether the contract itself is sufficiently specified.
+The executable validator checks machine-readable contract basics and hard rules that are safe to automate.
+
+Current checks include:
+
+- Locale is present
+- Profile is one of the supported profiles
+- Review status is valid
+- Validation targets exist
+- strict mode requires at least three validation targets
+- fenced CSS examples do not introduce `word-break: break-all`
+
+The parser also exports selected Contract Metadata to JSON using [`schema/design-contract.schema.json`](schema/design-contract.schema.json).
+
+### Visual validation
+
+Not every UI property should be reduced to static lint. Rendered output still needs review against realistic stress cases.
 
 Examples:
-- Is the locale explicit?
-- Is the profile selected?
-- Is Japanese font fallback declared?
-- Is `word-break: break-all` avoided as a global default?
-- Are validation targets written down?
 
-### 2. Visual validation
-Check whether the generated UI still respects the contract once rendered.
+- long Japanese paragraphs remain readable
+- Japanese-English headings wrap naturally
+- long URLs do not destroy layout or paragraph rhythm
+- form labels, helper text, errors, and IME states remain usable
+- mobile width does not reveal hidden overflow
 
-Examples:
-- Long Japanese paragraphs remain readable
-- Mixed Japanese-English headings do not break awkwardly
-- Long URLs do not destroy paragraph rhythm
-- Tables and forms do not inherit article spacing blindly
-- Mobile width remains stable
-
----
-
-## Validator scorecard
-
-We score validation results using three levels.
-
-- **PASS**: acceptable for current profile
-- **WARN**: usable, but contract or implementation should be tightened
-- **FAIL**: violates contract or breaks readability / usability
-
-See [`validators/scorecard.md`](validators/scorecard.md) for the detailed review sheet.
+The repository treats visual review as evidence that feeds contract improvement, not as a replacement for the contract.
 
 ---
 
 ## Fixtures
 
-The repository will grow around reusable fixtures rather than brand imitation.
+The fixture strategy intentionally focuses on **failure modes**, not brands.
 
-Initial fixture families:
-- long paragraphs
-- mixed-script headings
-- long URL overflow
-- forms with helper and error text
-- dense tables
-- mobile wrapping
-- docs-style prose + code coexistence
+### P0 — implemented
+
+- `long-paragraphs`
+- `mixed-script-headings`
+- `long-url-overflow`
+- `forms-ime-errors`
+
+### P1 — next
+
+- `dense-tables`
+- `mobile-wrap-stress`
+
+### P2 — later
+
+- `docs-prose-code`
 
 See [`fixtures/fixture-matrix.md`](fixtures/fixture-matrix.md).
 
 ---
 
-## Feedback channels
+## Repository structure
 
-To keep improvements grounded in real use cases, issue intake is split into two tracks.
-
-- **Broken output report**  
-  For cases where the current contract produced unstable or poor Japanese UI.
-
-- **Profile gap request**  
-  For cases where an existing profile is too weak or a new profile / overlay is needed.
-
-Issue forms live in `.github/ISSUE_TEMPLATE/`.
+```text
+jp-ui-contracts/
+├─ README.md
+├─ CHANGELOG.md
+├─ CONTRIBUTING.md
+├─ docs/
+├─ templates/
+├─ recipes/
+├─ validators/
+│  ├─ contract.py
+│  ├─ lint-rules.md
+│  └─ scorecard.md
+├─ schema/
+├─ fixtures/
+├─ skills/
+├─ examples/
+├─ tests/
+└─ .github/workflows/
+```
 
 ---
 
-## Recommended next commit order
+## CI
 
-1. Add Issue Forms and config
-2. Add validator scorecard
-3. Add fixture matrix
-4. Add `profile-selector.md`
-5. Add real fixture samples
-6. Start collecting broken outputs from users
+Pull requests that change contracts, the validator, schema, or tests run:
+
+```bash
+python validators/contract.py validate --strict ...
+python -m unittest discover -s tests -p "test_*.py" -v
+```
+
+This is the first step toward treating Japanese UI rules as regression-testable contracts rather than prose that is read once and forgotten.
+
+---
+
+## Feedback loop
+
+Two Issue Forms are available:
+
+- **Broken output report** — a current contract produced a reproducible Japanese UI failure
+- **Profile gap request** — an existing profile cannot express a repeated real-world requirement
+
+A useful broken-output report should be promotable into a fixture or validator case. That is how the repository improves from real failures instead of adding rules speculatively.
+
+---
+
+## v0.2 direction
+
+The goal of v0.2 is not to increase the number of collected designs. It is to close this loop:
+
+```text
+contract → generation → validation → evidence → contract update
+```
+
+Near-term work:
+
+1. stabilize the executable validator and JSON projection
+2. complete P0 fixture coverage
+3. add P1 fixtures for dense tables and mobile wrapping
+4. connect rendered regression evidence to pull requests
+5. improve profile-specific validation without creating a second source of truth
+
+See [`CHANGELOG.md`](CHANGELOG.md) for implemented changes.
 
 ---
 
@@ -289,9 +284,12 @@ Issue forms live in `.github/ISSUE_TEMPLATE/`.
 
 MIT
 
----
-
 ## Start here
 
-まずは `templates/base/DESIGN.md` をコピーし、  
-`Locale / Profile / Typography / Validation Targets` を埋めてください。
+Copy `templates/base/DESIGN.md` or the closest profile, define the validation targets, then run:
+
+```bash
+python validators/contract.py validate DESIGN.md
+```
+
+The target is not a perfect first generation. The target is a UI contract that can explain a failure and prevent the same failure from returning.
