@@ -1,0 +1,74 @@
+{
+  "schema_version": "1.0",
+  "project": "jp-ui-contracts",
+  "version": "0.2.0",
+  "release_date": "2026-09-14",
+  "previous_release": "v0.1.0",
+  "target_ref": "main",
+  "release_candidate_baseline_commit": "87f670d38a0bdb5a31835005737a7fca9fd77b6f",
+  "editable_contract_source": "DESIGN.md",
+  "generated_projection_schema": "schema/design-contract.schema.json",
+  "profiles": [
+    "base",
+    "media",
+    "saas",
+    "docs",
+    "dashboard"
+  ],
+  "required_fixtures": {
+    "P0": [
+      "long-paragraphs",
+      "mixed-script-headings",
+      "long-url-overflow",
+      "forms-ime-errors"
+    ],
+    "P1": [
+      "dense-tables",
+      "mobile-wrap-stress"
+    ],
+    "P2": [
+      "docs-prose-code"
+    ]
+  },
+  "validation": {
+    "contract_gate": "required",
+    "fixture_completeness_gate": "required",
+    "rendered_gate": "required",
+    "browser_projects": [
+      "desktop-chromium",
+      "mobile-chromium-pixel-7"
+    ],
+    "evidence_artifact": "rendered-validation-evidence",
+    "evidence_retention_days": 14,
+    "last_verified_main_workflow_run": 34803307916,
+    "last_verified_main_evidence_artifact_id": 10332660163,
+    "last_verified_main_result": "passed"
+  },
+  "release_gate": {
+    "spec": "docs/v0.2-release-gate.md",
+    "gates": {
+      "A_contract_integrity": "passed_on_baseline",
+      "B_fixture_completeness": "passed_on_baseline",
+      "C_rendered_validation": "passed_on_baseline",
+      "D_evidence_retention": "passed_on_baseline",
+      "E_documentation_consistency": "passed_on_baseline"
+    },
+    "release_candidate_rule": "The v0.2.0 tag must target the final main commit containing this manifest after the release-candidate pull request passes the same required gates."
+  },
+  "maintenance": {
+    "scheduled_validation": "weekly",
+    "dependency_updates": "dependabot",
+    "agent_repository_contract": "AGENTS.md"
+  },
+  "rollback": {
+    "target": "v0.1.0",
+    "note": "v0.2.0 does not require existing DESIGN.md users to maintain a second contract file; JSON remains a generated projection."
+  },
+  "known_non_goals": [
+    "pixel-perfect screenshot baseline comparison",
+    "Firefox/WebKit release gating",
+    "automated visual-diff approval",
+    "package-manager distribution of the validator",
+    "hosted fixture gallery"
+  ]
+}
