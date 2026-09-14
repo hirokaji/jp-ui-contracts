@@ -78,10 +78,10 @@ test('dense-tables: table overflow is contained locally', async ({ page }, testI
 test('forms-ime-errors: labels, helper text, errors and controls remain inspectable', async ({ page }) => {
   await page.goto('/fixtures/forms-ime-errors/index.html');
 
-  await expect(page.getByLabel('会社・組織名')).toBeVisible();
-  await expect(page.getByLabel('問い合わせ内容')).toBeVisible();
-  await expect(page.locator('[data-helper]')).toBeVisible();
-  await expect(page.locator('[data-error]')).toBeVisible();
+  await expect(page.getByLabel('この設定を適用するワークスペース名')).toBeVisible();
+  await expect(page.getByLabel(/外部システムへ変更を書き込む前に/)).toBeVisible();
+  await expect(page.locator('.help').first()).toBeVisible();
+  await expect(page.locator('.error')).toBeVisible();
 
   const controls = page.locator('input, textarea, button');
   await expect(controls.first()).toBeVisible();
