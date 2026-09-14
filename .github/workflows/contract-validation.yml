@@ -22,8 +22,7 @@ on:
       - "playwright.config.mjs"
       - ".github/dependabot.yml"
       - ".github/pull_request_template.md"
-      - ".github/workflows/contract-validation.yml"
-      - ".github/workflows/publish-v0.2.0.yml"
+      - ".github/workflows/**"
   push:
     branches:
       - main
@@ -44,8 +43,7 @@ on:
       - "playwright.config.mjs"
       - ".github/dependabot.yml"
       - ".github/pull_request_template.md"
-      - ".github/workflows/contract-validation.yml"
-      - ".github/workflows/publish-v0.2.0.yml"
+      - ".github/workflows/**"
 
 concurrency:
   group: contract-validation-${{ github.ref }}
