@@ -150,7 +150,7 @@ jobs:
         run: |
           set -euo pipefail
 
-          curl -fsS \
+          curl -fsS --retry 5 --retry-all-errors --retry-delay 2 \
             -H "Authorization: Bearer $GH_TOKEN" \
             -H 'Accept: application/vnd.github+json' \
             -H 'X-GitHub-Api-Version: 2022-11-28' \
@@ -161,7 +161,7 @@ jobs:
           test "$(jq -r '.draft' /tmp/release-verified.json)" = "false"
           test "$(jq -r '.prerelease' /tmp/release-verified.json)" = "false"
 
-          curl -fsS \
+          curl -fsS --retry 5 --retry-all-errors --retry-delay 2 \
             -H "Authorization: Bearer $GH_TOKEN" \
             -H 'Accept: application/vnd.github+json' \
             -H 'X-GitHub-Api-Version: 2022-11-28' \
