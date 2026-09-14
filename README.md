@@ -5,15 +5,15 @@
 
 `jp-ui-contracts` は、日本語UIをAIエージェントやコード生成ツールへ任せるための **design contract + validation kit** です。
 
-公開サイトを大量に収集する見本帳ではありません。日本語本文、和欧混植、改行、フォーム密度、表、モバイル幅のような壊れやすい条件を、**契約 → 生成 → 検証 → Evidence → 契約修正**のループとして扱います。
+公開サイトを大量に収集する見本帳ではありません。日本語本文、和欧混植、改行、フォーム密度、表、技術文書、モバイル幅のような壊れやすい条件を、**契約 → 生成 → 検証 → Evidence → 契約修正**のループとして扱います。
 
 ## Status
 
 - Latest release: `v0.1.0 — public preview`
-- `v0.2`: release-gate implementation in progress
+- `v0.2`: release candidate hardening in progress
 - `DESIGN.md` remains the human-edited source
 - machine-readable JSON is generated from `DESIGN.md`; it is not maintained separately
-- P0 + P1 fixtures are renderable and CI-gated
+- P0 + P1 + P2 fixtures are renderable and CI-gated
 - browser-level validation uses desktop Chromium and a Pixel 7 mobile profile explicitly bound to Chromium
 
 See [`docs/v0.2-release-gate.md`](docs/v0.2-release-gate.md) for the exact release conditions.
@@ -135,7 +135,7 @@ Then run:
 npm run test:rendered
 ```
 
-The rendered suite exercises every P0/P1 fixture on desktop Chromium and a Pixel 7 mobile profile explicitly bound to Chromium. It checks document-level overflow plus fixture-specific geometry and accessibility-oriented conditions.
+The rendered suite exercises every required fixture on desktop Chromium and a Pixel 7 mobile profile explicitly bound to Chromium. It checks document-level overflow plus fixture-specific geometry and accessibility-oriented conditions.
 
 ### 6. Review PASS / WARN / FAIL
 
@@ -147,6 +147,7 @@ Current implemented fixtures:
 - [`fixtures/forms-ime-errors/`](fixtures/forms-ime-errors/) — Japanese labels, IME, help, error, actions
 - [`fixtures/dense-tables/`](fixtures/dense-tables/) — dense Japanese tables and local overflow containment
 - [`fixtures/mobile-wrap-stress/`](fixtures/mobile-wrap-stress/) — narrow viewport wrapping and minimum action size
+- [`fixtures/docs-prose-code/`](fixtures/docs-prose-code/) — Japanese prose, inline code, code blocks, callouts, and tables
 
 Use each fixture README and [`validators/scorecard.md`](validators/scorecard.md) to classify the result as PASS / WARN / FAIL.
 
@@ -202,7 +203,7 @@ The parser also exports selected Contract Metadata to JSON using [`schema/design
 
 ### 2. Fixture completeness validation
 
-`tests/test_fixture_manifest.py` prevents P0/P1 fixtures from silently regressing to placeholders.
+`tests/test_fixture_manifest.py` prevents required fixtures from silently regressing to placeholders.
 
 It requires:
 
@@ -210,7 +211,7 @@ It requires:
 - Japanese page language
 - stable fixture identity
 - completed PASS / WARN / FAIL criteria
-- no remaining `TBD` in required P0/P1 fixture criteria
+- no remaining `TBD` in required fixture criteria
 
 ### 3. Rendered browser validation
 
@@ -228,6 +229,7 @@ Fixture-specific gates currently include:
 - dense tables keep wide overflow inside the table wrapper
 - forms expose labels, helper text, errors, and controls correctly
 - mobile-marked actions preserve at least 44px target height
+- technical docs keep code and table overflow inside their own scroll surfaces while callouts remain inspectable
 
 Every common rendered test captures a full-page screenshot and JSON render metrics. Failed browser runs retain Playwright trace Evidence.
 
@@ -251,7 +253,7 @@ The fixture strategy intentionally focuses on **failure modes**, not brands.
 - `dense-tables`
 - `mobile-wrap-stress`
 
-### P2 — later
+### P2 — implemented and CI-gated
 
 - `docs-prose-code`
 
@@ -332,11 +334,11 @@ The release decision is governed by [`docs/v0.2-release-gate.md`](docs/v0.2-rele
 
 Current post-gate extensions include:
 
-1. implement the P2 `docs-prose-code` fixture
-2. decide whether cross-browser Firefox / WebKit checks should become a later hard gate
-3. evaluate pixel-baseline comparison separately from structural rendered checks
-4. improve profile-specific semantic validation
-5. add a hosted visual surface only if it helps review rather than turning the project into a catalog
+1. decide whether cross-browser Firefox / WebKit checks should become a later hard gate
+2. evaluate pixel-baseline comparison separately from structural rendered checks
+3. improve profile-specific semantic validation
+4. add a hosted visual surface only if it helps review rather than turning the project into a catalog
+5. package the validator only if installation friction becomes a measured problem
 
 See [`CHANGELOG.md`](CHANGELOG.md) for implemented changes.
 

@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Docs prose + code fixture</title>
+  <style>
+    * { box-sizing: border-box; }
+    html { line-break: strict; word-break: normal; overflow-wrap: anywhere; }
+    body {
+      margin: 0;
+      color: #1b1b1b;
+      background: #f6f6f6;
+      font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Yu Gothic UI", Meiryo, sans-serif;
+      line-height: 1.72;
+    }
+    main { width: min(100% - 28px, 860px); margin: 40px auto 72px; }
+    article { min-width: 0; background: #fff; padding: clamp(20px, 5vw, 48px); border: 1px solid #ddd; border-radius: 12px; }
+    h1 { margin: 0 0 14px; font-size: clamp(27px, 5vw, 38px); line-height: 1.35; }
+    h2 { margin: 36px 0 10px; font-size: 23px; line-height: 1.45; }
+    p { margin: 0 0 18px; }
+    code, pre { font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace; }
+    code { font-size: .92em; padding: .12em .3em; background: #f0f0f0; border-radius: 4px; }
+    .code-scroll { max-width: 100%; overflow-x: auto; margin: 20px 0 24px; border: 1px solid #d8d8d8; border-radius: 8px; background: #151515; }
+    pre { min-width: 620px; margin: 0; padding: 18px; color: #f4f4f4; font-size: 14px; line-height: 1.65; white-space: pre; }
+    pre code { padding: 0; background: transparent; color: inherit; }
+    .callout { margin: 24px 0; padding: 16px 18px; border-left: 4px solid #555; background: #f3f3f3; }
+    .callout strong { display: block; margin-bottom: 4px; }
+    .table-scroll { width: 100%; overflow-x: auto; margin-top: 18px; }
+    table { width: 100%; min-width: 640px; border-collapse: collapse; font-size: 14px; }
+    th, td { padding: 10px 12px; border-bottom: 1px solid #ddd; text-align: left; vertical-align: top; }
+    th { background: #f2f2f2; white-space: nowrap; }
+    .meta { color: #666; font-size: 13px; margin-bottom: 28px; }
+    @media (max-width: 520px) {
+      main { width: min(100% - 18px, 860px); margin: 18px auto 48px; }
+      article { padding: 18px 16px; }
+      h2 { margin-top: 30px; }
+    }
+  </style>
+</head>
+<body data-fixture="docs-prose-code">
+  <main>
+    <article>
+      <h1>Runtime Feedback Loopを実装するとき、Evidenceをどこへ戻すか</h1>
+      <div class="meta">日本語本文・inline code・code block・callout・tableが同じ技術文書に共存するfixture</div>
+
+      <p>技術文書では、本文だけを読みやすくしても十分ではありません。たとえば <code>failure_attribution</code> のような英語識別子や設定名が日本語文中に入り、直後に長いコード例が続くと、本文のリズムとコードの密度が衝突します。</p>
+      <p>重要なのは、本文・コード・補足・表を同じ密度で扱わないことです。本文は持続して読める必要がありますが、コードは正確な文字列を保ち、表は走査性を優先します。</p>
+
+      <h2>設定例 — Evidenceから変更候補を作る</h2>
+      <div class="code-scroll" data-code-scroll tabindex="0" aria-label="横スクロール可能なコード例">
+        <pre><code>feedback:
+  evidence_source: runtime/evidence/latest.json
+  failure_attribution: contract_boundary
+  change_target: evaluation_rule
+  require_human_approval: true
+  exceptionally_long_machine_identifier: runtime_evidence_failure_attribution_change_candidate_20260914_example</code></pre>
+      </div>
+
+      <aside class="callout" data-callout>
+        <strong>注意</strong>
+        コードの横幅を本文側の改行規則で無理に折り返すと、コピー可能性や識別子の正確性を壊すことがあります。長いコードは、文書全体ではなくコード領域内へoverflowを封じ込めます。
+      </aside>
+
+      <h2>失敗を戻す先</h2>
+      <p>観測した問題をすべてCSSの局所修正へ落とすのではなく、欠けている契約、弱いprofile default、fixture gap、validator gap、implementation bugのどこへ戻すかを分けます。</p>
+
+      <div class="table-scroll" data-docs-table-scroll tabindex="0" aria-label="横スクロール可能な帰属表">
+        <table>
+          <thead>
+            <tr><th>観測</th><th>主な帰属先</th><th>次の行動</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>本文中の英語識別子が読みにくい</td><td>profile / typography rule</td><td>mixed-script条件を見直す</td></tr>
+            <tr><td>長いコードがページ幅を破壊する</td><td>implementation / code surface rule</td><td>コード領域にoverflowを封じ込める</td></tr>
+            <tr><td>calloutだけ過密になる</td><td>component rule</td><td>本文と別の密度契約を置く</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </article>
+  </main>
+</body>
+</html>

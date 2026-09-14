@@ -7,6 +7,7 @@ const fixtures = [
   'forms-ime-errors',
   'dense-tables',
   'mobile-wrap-stress',
+  'docs-prose-code',
 ];
 
 async function captureEvidence(page, testInfo, fixture) {
@@ -43,6 +44,14 @@ async function captureEvidence(page, testInfo, fixture) {
   return metrics;
 }
 
+async function localOverflowGeometry(locator) {
+  return locator.evaluate((element) => ({
+    clientWidth: element.clientWidth,
+    scrollWidth: element.scrollWidth,
+    overflowX: getComputedStyle(element).overflowX,
+  }));
+}
+
 for (const fixture of fixtures) {
   test(`${fixture}: renders without document-level horizontal overflow`, async ({ page }, testInfo) => {
     await page.goto(`/fixtures/${fixture}/index.html`);
@@ -62,11 +71,7 @@ test('dense-tables: table overflow is contained locally', async ({ page }, testI
   await expect(scroller).toBeVisible();
   await expect(table).toBeVisible();
 
-  const geometry = await scroller.evaluate((element) => ({
-    clientWidth: element.clientWidth,
-    scrollWidth: element.scrollWidth,
-    overflowX: getComputedStyle(element).overflowX,
-  }));
+  const geometry = await localOverflowGeometry(scroller);
   expect(['auto', 'scroll']).toContain(geometry.overflowX);
 
   await testInfo.attach('table-geometry', {
@@ -101,4 +106,27 @@ test('mobile-wrap-stress: mobile targets keep a minimum 44px action height', asy
     expect(box, `target ${index} should have a bounding box`).not.toBeNull();
     expect(box.height, `target ${index} height`).toBeGreaterThanOrEqual(44);
   }
+});
+
+test('docs-prose-code: code and table overflow stay inside their own surfaces', async ({ page }, testInfo) => {
+  await page.goto('/fixtures/docs-prose-code/index.html');
+
+  const codeScroller = page.locator('[data-code-scroll]');
+  const tableScroller = page.locator('[data-docs-table-scroll]');
+  const callout = page.locator('[data-callout]');
+
+  await expect(codeScroller).toBeVisible();
+  await expect(tableScroller).toBeVisible();
+  await expect(callout).toBeVisible();
+
+  const codeGeometry = await localOverflowGeometry(codeScroller);
+  const tableGeometry = await localOverflowGeometry(tableScroller);
+
+  expect(['auto', 'scroll']).toContain(codeGeometry.overflowX);
+  expect(['auto', 'scroll']).toContain(tableGeometry.overflowX);
+
+  await testInfo.attach('docs-surface-geometry', {
+    body: Buffer.from(JSON.stringify({ code: codeGeometry, table: tableGeometry }, null, 2)),
+    contentType: 'application/json',
+  });
 });

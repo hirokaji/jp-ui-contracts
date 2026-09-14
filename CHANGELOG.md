@@ -16,7 +16,7 @@ All notable changes to `jp-ui-contracts` are documented here.
 - `skills/japanese-ui-contract-review/SKILL.md`
 - GitHub Actions contract validation workflow
 - unit tests for parser and validator behavior
-- fixture completeness gate for required P0/P1 fixtures
+- fixture completeness gate for required P0/P1/P2 fixtures
 - executable P0 fixture pages and review criteria for:
   - long Japanese paragraphs
   - mixed-script headings
@@ -25,14 +25,17 @@ All notable changes to `jp-ui-contracts` are documented here.
 - executable P1 fixture pages and review criteria for:
   - dense tables
   - mobile wrapping stress
+- executable P2 fixture page and review criteria for:
+  - Japanese technical prose + inline code + code blocks + callouts + tables
 - Playwright 1.63.0 rendered validation harness
   - desktop Chromium project
   - mobile Chromium project using the Pixel 7 device profile
   - explicit Chromium browser binding for both projects
-  - document-level horizontal overflow gate across P0/P1 fixtures
+  - document-level horizontal overflow gate across all required fixtures
   - dense-table local overflow containment check
   - form label / helper / error / control inspection
   - mobile 44px minimum action-height check
+  - docs code/table local overflow containment and callout inspection
 - rendered Evidence capture
   - full-page screenshots
   - JSON render metrics
@@ -49,13 +52,13 @@ All notable changes to `jp-ui-contracts` are documented here.
 - made failure attribution explicit: missing rule / weak profile default / fixture gap / validator gap / implementation bug
 - extended the core loop from static contract checks to rendered browser Evidence
 - corrected the mobile project from an iPhone descriptor that implicitly selected WebKit to a Chromium-bound Pixel 7 profile, keeping the declared browser gate aligned with installed CI dependencies
+- promoted `docs-prose-code` from a future P2 placeholder into the v0.2 required fixture set
 
 ### Not included yet
 
 - pixel-perfect screenshot baseline comparison
 - Firefox / WebKit release gating
 - automated visual-diff approval workflow
-- `docs-prose-code` P2 fixture implementation
 - package / CLI distribution beyond direct Python invocation
 - hosted gallery / GitHub Pages
 - v0.2 release tag

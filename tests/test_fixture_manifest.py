@@ -9,6 +9,7 @@ REQUIRED_FIXTURES = (
     "forms-ime-errors",
     "dense-tables",
     "mobile-wrap-stress",
+    "docs-prose-code",
 )
 
 
