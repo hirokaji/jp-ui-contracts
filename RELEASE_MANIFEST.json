@@ -40,20 +40,22 @@
     ],
     "evidence_artifact": "rendered-validation-evidence",
     "evidence_retention_days": 14,
-    "last_verified_main_workflow_run": 34803307916,
-    "last_verified_main_evidence_artifact_id": 10332660163,
-    "last_verified_main_result": "passed"
+    "last_verified_main_workflow_run": 34804830239,
+    "last_verified_main_evidence_artifact_id": 10332553145,
+    "last_verified_main_result": "passed",
+    "last_verified_main_evidence_digest": "sha256:28323676d08f64623bc2dee6a3eba5d7e94d2c11242d059940d552dd3409757b"
   },
   "release_gate": {
     "spec": "docs/v0.2-release-gate.md",
     "gates": {
-      "A_contract_integrity": "passed_on_baseline",
-      "B_fixture_completeness": "passed_on_baseline",
-      "C_rendered_validation": "passed_on_baseline",
-      "D_evidence_retention": "passed_on_baseline",
-      "E_documentation_consistency": "passed_on_baseline"
+      "A_contract_integrity": "passed_on_release_commit",
+      "B_fixture_completeness": "passed_on_release_commit",
+      "C_rendered_validation": "passed_on_release_commit",
+      "D_evidence_retention": "passed_on_release_commit",
+      "E_documentation_consistency": "passed_on_release_commit"
     },
-    "release_candidate_rule": "The v0.2.0 tag must target the final main commit containing this manifest after the release-candidate pull request passes the same required gates."
+    "release_candidate_rule": "The v0.2.0 tag must target the final main commit containing this manifest after the release-candidate pull request passes the same required gates.",
+    "publication_gate": "passed"
   },
   "maintenance": {
     "scheduled_validation": "weekly",
@@ -70,5 +72,14 @@
     "automated visual-diff approval",
     "package-manager distribution of the validator",
     "hosted fixture gallery"
-  ]
+  ],
+  "publication": {
+    "status": "published",
+    "tag": "v0.2.0",
+    "release_url": "https://github.com/hirokaji/jp-ui-contracts/releases/tag/v0.2.0",
+    "release_id": 388142850,
+    "release_commit": "ba4f44c65b18c27ba784d9171a80859f798c5c89",
+    "published_at": "2026-09-14T04:07:07Z",
+    "publisher": "github-actions[bot]"
+  }
 }
