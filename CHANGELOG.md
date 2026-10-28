@@ -4,7 +4,10 @@ All notable changes to `jp-ui-contracts` are documented here.
 
 ## [Unreleased]
 
-No queued changes after the v0.2.0 release.
+### Changed
+
+- Update the pinned `@playwright/test` development dependency from 1.63.0 to 1.64.0.
+- Keep the existing Japanese UI contracts, desktop/Pixel 7 Chromium gates, and screenshot/JSON/report Evidence workflow unchanged.
 
 ## [0.2.0] — 2026-09-14
 
