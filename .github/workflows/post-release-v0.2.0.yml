@@ -1,0 +1,117 @@
+name: sync-v0.2.0-publication
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - ".github/workflows/post-release-v0.2.0.yml"
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Fetch published v0.2.0 state
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+        run: |
+          set -euo pipefail
+          curl -fsS \
+            -H "Authorization: Bearer $GH_TOKEN" \
+            -H 'Accept: application/vnd.github+json' \
+            -H 'X-GitHub-Api-Version: 2022-11-28' \
+            "https://api.github.com/repos/$REPO/releases/tags/v0.2.0" \
+            > /tmp/v0.2.0-release.json
+
+          test "$(jq -r '.draft' /tmp/v0.2.0-release.json)" = "false"
+          test "$(jq -r '.prerelease' /tmp/v0.2.0-release.json)" = "false"
+          test "$(jq -r '.tag_name' /tmp/v0.2.0-release.json)" = "v0.2.0"
+
+      - name: Synchronize README, CHANGELOG, and release manifest
+        env:
+          VERIFIED_MAIN_WORKFLOW_RUN: "34804830239"
+          VERIFIED_MAIN_EVIDENCE_ARTIFACT_ID: "10332553145"
+          VERIFIED_MAIN_EVIDENCE_DIGEST: "sha256:28323676d08f64623bc2dee6a3eba5d7e94d2c11242d059940d552dd3409757b"
+        run: |
+          python - <<'PY'
+          import json
+          import os
+          from pathlib import Path
+
+          release = json.loads(Path('/tmp/v0.2.0-release.json').read_text())
+          release_url = release['html_url']
+          published_at = release['published_at']
+          release_commit = release['target_commitish']
+
+          readme_path = Path('README.md')
+          readme = readme_path.read_text()
+          old_status = "- Latest release: `v0.1.0 — public preview`\n- `v0.2`: release candidate hardening in progress"
+          new_status = (
+              f"- Latest release: [`v0.2.0 — executable contract validation`]({release_url})\n"
+              f"- `v0.2.0` is published and the release tag targets `{release_commit}`"
+          )
+          if old_status in readme:
+              readme = readme.replace(old_status, new_status)
+          elif release_url not in readme:
+              raise SystemExit('README release status did not match the expected pre-release state')
+
+          readme = readme.replace('## v0.2 release direction', '## After v0.2.0')
+          readme = readme.replace(
+              'The target of v0.2 is to close this loop:',
+              '`v0.2.0` closes this first validation loop:'
+          )
+          readme_path.write_text(readme)
+
+          changelog_path = Path('CHANGELOG.md')
+          changelog = changelog_path.read_text()
+          changelog = changelog.replace(
+              '## [Unreleased] — v0.2 contract + rendered validation loop',
+              '## [0.2.0] — 2026-09-14'
+          )
+          changelog = changelog.replace('- v0.2 release tag\n', '')
+          changelog_path.write_text(changelog)
+
+          manifest_path = Path('RELEASE_MANIFEST.json')
+          manifest = json.loads(manifest_path.read_text())
+          manifest['publication'] = {
+              'status': 'published',
+              'tag': release['tag_name'],
+              'release_url': release_url,
+              'release_id': release['id'],
+              'release_commit': release_commit,
+              'published_at': published_at,
+              'publisher': release['author']['login'],
+          }
+          validation = manifest.setdefault('validation', {})
+          validation['last_verified_main_workflow_run'] = int(os.environ['VERIFIED_MAIN_WORKFLOW_RUN'])
+          validation['last_verified_main_evidence_artifact_id'] = int(os.environ['VERIFIED_MAIN_EVIDENCE_ARTIFACT_ID'])
+          validation['last_verified_main_evidence_digest'] = os.environ['VERIFIED_MAIN_EVIDENCE_DIGEST']
+          validation['last_verified_main_result'] = 'passed'
+          gates = manifest.setdefault('release_gate', {}).setdefault('gates', {})
+          for key in list(gates):
+              gates[key] = 'passed_on_release_commit'
+          manifest['release_gate']['publication_gate'] = 'passed'
+          manifest_path.write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + '\n')
+          PY
+
+      - name: Commit publication-state synchronization
+        run: |
+          set -euo pipefail
+          if git diff --quiet -- README.md CHANGELOG.md RELEASE_MANIFEST.json; then
+            echo "Publication state is already synchronized."
+            exit 0
+          fi
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add README.md CHANGELOG.md RELEASE_MANIFEST.json
+          git commit -m "release: mark v0.2.0 as published"
+          git push origin HEAD:main

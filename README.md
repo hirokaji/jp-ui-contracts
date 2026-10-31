@@ -9,8 +9,8 @@
 
 ## Status
 
-- Latest release: `v0.1.0 — public preview`
-- `v0.2`: release candidate hardening in progress
+- Latest release: [`v0.2.0 — executable contract validation`](https://github.com/hirokaji/jp-ui-contracts/releases/tag/v0.2.0)
+- `v0.2.0` is published and the release tag targets `ba4f44c65b18c27ba784d9171a80859f798c5c89`
 - `DESIGN.md` remains the human-edited source
 - machine-readable JSON is generated from `DESIGN.md`; it is not maintained separately
 - P0 + P1 + P2 fixtures are renderable and CI-gated
@@ -322,9 +322,9 @@ A useful broken-output report should be promotable into a fixture or validator c
 
 ---
 
-## v0.2 release direction
+## After v0.2.0
 
-The target of v0.2 is to close this loop:
+`v0.2.0` closes this first validation loop:
 
 ```text
 contract → generation → static validation → rendered validation → evidence → contract update
