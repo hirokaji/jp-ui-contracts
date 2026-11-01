@@ -4,6 +4,13 @@ All notable changes to `jp-ui-contracts` are documented here.
 
 ## [Unreleased]
 
+### Added
+
+- Local-URL Chromium horizontal-overflow checker with separate PASS / FAIL / ERROR outcomes, per-run screenshot/JSON Evidence, and explicit untested scope.
+- CLI regression coverage for intended overflow, repaired output, HTTP and readiness failures, redirects, connection errors, and the hidden-content limitation.
+- Synthetic Japanese-label before/after walkthrough, beginner setup guide, and validation coverage map.
+
+
 ### Changed
 
 - Update the pinned `@playwright/test` development dependency from 1.63.0 to 1.64.0.

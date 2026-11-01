@@ -13,11 +13,12 @@ on:
       - "AGENTS.md"
       - "docs/**"
       - "templates/**/DESIGN.md"
-      - "examples/**/DESIGN.md"
+      - "examples/**"
       - "fixtures/**"
-      - "validators/contract.py"
+      - "validators/**"
       - "schema/design-contract.schema.json"
       - "tests/**"
+      - "recipes/**"
       - "package.json"
       - "playwright.config.mjs"
       - ".github/dependabot.yml"
@@ -34,11 +35,12 @@ on:
       - "AGENTS.md"
       - "docs/**"
       - "templates/**/DESIGN.md"
-      - "examples/**/DESIGN.md"
+      - "examples/**"
       - "fixtures/**"
-      - "validators/contract.py"
+      - "validators/**"
       - "schema/design-contract.schema.json"
       - "tests/**"
+      - "recipes/**"
       - "package.json"
       - "playwright.config.mjs"
       - ".github/dependabot.yml"
@@ -85,6 +87,8 @@ jobs:
           python-version: "3.12"
       - name: Install Playwright test runner
         run: npm install --ignore-scripts --no-audit --no-fund
+      - name: Check UI CLI arguments
+        run: npm run test:cli
       - name: Install Chromium and system dependencies
         run: npx playwright install --with-deps chromium
       - name: Run rendered UI gates

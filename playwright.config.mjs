@@ -34,6 +34,7 @@ export default defineConfig({
     },
     {
       name: 'mobile-chromium',
+      testIgnore: /adoption\.spec\.mjs/,
       use: {
         ...devices['Pixel 7'],
         browserName: 'chromium',

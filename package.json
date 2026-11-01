@@ -5,7 +5,9 @@
   "description": "Rendered validation harness for Japanese UI design contracts.",
   "scripts": {
     "test:rendered": "playwright test",
-    "test:rendered:headed": "playwright test --headed"
+    "test:rendered:headed": "playwright test --headed",
+    "check:ui": "node validators/overflow.mjs",
+    "test:cli": "node --test tests/overflow-options.test.mjs"
   },
   "devDependencies": {
     "@playwright/test": "1.64.0"
