@@ -1,359 +1,139 @@
 # jp-ui-contracts
 
-> Japanese UI contract & validation kit for AI agents.  
-> Write the design intent in `DESIGN.md`, generate the UI, validate the result, and return failures to the contract.
+Japanese UI design contracts and focused browser checks for AI-assisted development.
 
-`jp-ui-contracts` は、日本語UIをAIエージェントやコード生成ツールへ任せるための **design contract + validation kit** です。
+**AIで作る日本語UIのルールをDESIGN.mdに残し、生成した画面の崩れを確かめるためのキットです。**
 
-公開サイトを大量に収集する見本帳ではありません。日本語本文、和欧混植、改行、フォーム密度、表、技術文書、モバイル幅のような壊れやすい条件を、**契約 → 生成 → 検証 → Evidence → 契約修正**のループとして扱います。
+長い日本語ラベル、和欧混植、フォーム、表、モバイル幅を扱います。用途別の契約テンプレートに加え、検証用の画面、目視レビューの基準、自分のローカル画面を検査するコマンドを用意しています。
 
-## Status
+## まず、一つの崩れを見つける
 
-- Latest release: [`v0.2.0 — executable contract validation`](https://github.com/hirokaji/jp-ui-contracts/releases/tag/v0.2.0)
-- `v0.2.0` is published and the release tag targets `ba4f44c65b18c27ba784d9171a80859f798c5c89`
-- `DESIGN.md` remains the human-edited source
-- machine-readable JSON is generated from `DESIGN.md`; it is not maintained separately
-- P0 + P1 + P2 fixtures are renderable and CI-gated
-- browser-level validation uses desktop Chromium and a Pixel 7 mobile profile explicitly bound to Chromium
+幅412pxの通知設定画面です。長い日本語ラベルを折り返さずに並べると、画面が横へ広がります。同じ内容・文字サイズのまま、ボタンとその配置を折り返すと収まります。
 
-See [`docs/v0.2-release-gate.md`](docs/v0.2-release-gate.md) for the exact release conditions.
+| 修正前：横にはみ出す | 修正後：同じ内容が収まる |
+|---|---|
+| ![修正前：長い日本語ラベルのボタンが画面右端からはみ出す](docs/images/overflow-before.png) | ![修正後：同じラベルが折り返され、戻るボタンも画面内に収まる](docs/images/overflow-after.png) |
+| clientWidth **412px** / scrollWidth **549px** → **FAIL** | clientWidth **412px** / scrollWidth **412px** → **PASS** |
 
-## What this repository provides
+[測定記録と出典](docs/images/overflow-measurements.json)：2026年11月1日、Chromium 156.0.8078.4、412 × 839 CSS px。フォントや実行環境が変わると測定値も変わるため、数値を合格基準として固定しません。
 
-- `DESIGN.md` templates for Japanese UI
-- context profiles: `base`, `media`, `saas`, `docs`, `dashboard`
-- Japanese typography and overflow CSS recipes
-- reusable failure fixtures
-- PASS / WARN / FAIL review criteria
-- executable zero-dependency contract validator
-- JSON projection for CI and agents
-- an agent skill for contract-driven UI review
-- browser-level rendered validation with Playwright
-- screenshot and render-metric Evidence from CI
-- GitHub Actions validation on pull requests
-- Issue Forms for broken outputs and profile gaps
+この例は導入用に作成した合成例です。AIの生成品質や改善率を比較した実験ではありません。画像はPlaywrightで取得し、測定結果と対応させています。
 
-## What this repository does not try to be
+修正の中心は、配置と文言の折り返しです。
 
-- a catalog of copied brand designs
-- a ranking of Japanese websites
-- one universal typography rule for every Japanese interface
-- a promise that a prompt alone guarantees UI quality
-
----
-
-## Core loop
-
-```text
-DESIGN.md
-   ↓
-AI / code generation
-   ↓
-rendered UI
-   ↓
-fixture + static validator + browser gate + human review
-   ↓
-PASS / WARN / FAIL
-   ↓
-Evidence: screenshot / geometry / trace / report
-   ↓
-missing rule | weak default | fixture gap | validator gap | implementation bug
-   ↓
-return the change to the owning layer
+```css
+.actions { flex-wrap: wrap; }
+.action {
+  white-space: normal;
+  min-width: 0;
+  max-width: 100%;
+  overflow-wrap: anywhere;
+}
 ```
 
-The important unit is not a pretty screenshot. It is a failure that can be reproduced, attributed, evidenced, and prevented from returning.
+文字を小さくしたり、内容を隠したりせずに修正します。[修正前後のHTMLと検出テスト](examples/overflow-walkthrough/README.md)を確認できます。
 
----
+## 試す
 
-## Profiles
-
-| Profile | Best for | Main concern |
-|---|---|---|
-| `base` | minimal shared contract | locale / typography / validation |
-| `media` | articles, blogs, owned media | long-form reading rhythm |
-| `saas` | admin, settings, B2B tools | labels / forms / stable density |
-| `docs` | technical docs, help, knowledge | prose + code + tables |
-| `dashboard` | KPI, monitoring, analytics | scanning / tables / metrics |
-
----
-
-## Quick start
-
-### 1. Choose a template
-
-Copy one of:
-
-```text
-templates/base/DESIGN.md
-templates/media/DESIGN.md
-templates/saas/DESIGN.md
-templates/docs/DESIGN.md
-templates/dashboard/DESIGN.md
-```
-
-Fill in the project-specific design intent, typography, component rules, prohibited patterns, and validation targets.
-
-### 2. Validate the contract
-
-No Python package install is required.
+Git・Node.js 22・Python 3.12を使う手順です。以下は現在のmain向けで、公開済みv0.2.0には新しい`check:ui`コマンドは含まれません。
 
 ```bash
-python validators/contract.py validate DESIGN.md
-```
-
-For repository-level checks:
-
-```bash
-python validators/contract.py validate --strict templates/*/DESIGN.md
-```
-
-### 3. Export a machine-readable projection
-
-```bash
-python validators/contract.py export DESIGN.md -o design-contract.json
-```
-
-`DESIGN.md` is still the editable source. The JSON is a projection for CI, agents, and other tools.
-
-### 4. Generate or revise the UI
-
-Give the active `DESIGN.md` to the coding agent before visual implementation. Add only the CSS recipes required by the project.
-
-### 5. Run the rendered fixtures
-
-Install the pinned Playwright test dependency and Chromium once:
-
-```bash
-npm install
+git clone https://github.com/hirokaji/jp-ui-contracts.git
+cd jp-ui-contracts
+npm install --ignore-scripts --no-audit --no-fund
 npx playwright install chromium
+python -m http.server 8000 --bind 127.0.0.1
 ```
 
-Then run:
+サーバーを動かしたまま別のターミナルを開き、同じリポジトリのルートで次を一つずつ実行します。
 
 ```bash
-npm run test:rendered
+npm run check:ui -- --url http://127.0.0.1:8000/examples/overflow-walkthrough/before.html
+npm run check:ui -- --url http://127.0.0.1:8000/examples/overflow-walkthrough/after.html
 ```
 
-The rendered suite exercises every required fixture on desktop Chromium and a Pixel 7 mobile profile explicitly bound to Chromium. It checks document-level overflow plus fixture-specific geometry and accessibility-oriented conditions.
+修正前は**FAIL（終了コード1）**、修正後は**PASS（終了コード0）**が期待結果です。`ui-evidence/run-*/`にJSONレポートと画像が残ります。ERROR（終了コード2）は検査未成立です。最初のFAILで止まるため、二つのコマンドを`&&`でつながないでください。
 
-### 6. Review PASS / WARN / FAIL
+Windows、Linuxの依存関係、結果の読み方、失敗時の対処を含む[最初からの導入手順](docs/getting-started.md)があります。
 
-Current implemented fixtures:
+## 自分の案件で使う
 
-- [`fixtures/long-paragraphs/`](fixtures/long-paragraphs/) — sustained Japanese reading
-- [`fixtures/mixed-script-headings/`](fixtures/mixed-script-headings/) — Japanese + English headings
-- [`fixtures/long-url-overflow/`](fixtures/long-url-overflow/) — URLs and long machine tokens
-- [`fixtures/forms-ime-errors/`](fixtures/forms-ime-errors/) — Japanese labels, IME, help, error, actions
-- [`fixtures/dense-tables/`](fixtures/dense-tables/) — dense Japanese tables and local overflow containment
-- [`fixtures/mobile-wrap-stress/`](fixtures/mobile-wrap-stress/) — narrow viewport wrapping and minimum action size
-- [`fixtures/docs-prose-code/`](fixtures/docs-prose-code/) — Japanese prose, inline code, code blocks, callouts, and tables
+1. 用途に合う`templates/`のDESIGN.mdを、自分のアプリへコピーする。
+2. 利用者、用途、文字・配置の方針、確認する画面と状態を記入する。
+3. コーディングエージェントへDESIGN.mdを渡して実装・修正する。
+4. アプリをローカルで起動し、そのURLを指定して検査する。
+5. 読みやすさ・内容の欠け・IMEなどを目視確認し、問題の原因に応じて実装や契約へ戻す。
 
-Use each fixture README and [`validators/scorecard.md`](validators/scorecard.md) to classify the result as PASS / WARN / FAIL.
-
-### 7. Return failures to the owning layer
-
-Every WARN / FAIL should be attributed to one primary bucket:
-
-- missing contract rule
-- weak profile default
-- missing fixture
-- validator gap
-- implementation bug
-
-Do not accumulate one-off CSS patches when the real problem belongs in the contract or profile.
-
----
-
-## Agent skill
-
-[`skills/japanese-ui-contract-review/SKILL.md`](skills/japanese-ui-contract-review/SKILL.md) defines a reusable workflow for AI agents:
-
-1. read the contract
-2. statically validate it
-3. identify profile and validation targets
-4. generate or revise the UI
-5. exercise the relevant fixtures
-6. run rendered checks when available
-7. score PASS / WARN / FAIL
-8. attribute the failure
-9. fix the owning layer
-10. re-run validation and report Evidence
-
-The skill is deliberately tool-neutral. It can be adapted to coding agents that can read repository files, execute commands, and inspect rendered UI.
-
----
-
-## Validation model
-
-### 1. Static contract validation
-
-The executable validator checks machine-readable contract basics and hard rules that are safe to automate.
-
-Current checks include:
-
-- Locale is present
-- Profile is one of the supported profiles
-- Review status is valid
-- Validation targets exist
-- strict mode requires at least three validation targets
-- fenced CSS examples do not introduce `word-break: break-all`
-
-The parser also exports selected Contract Metadata to JSON using [`schema/design-contract.schema.json`](schema/design-contract.schema.json).
-
-### 2. Fixture completeness validation
-
-`tests/test_fixture_manifest.py` prevents required fixtures from silently regressing to placeholders.
-
-It requires:
-
-- a renderable `index.html`
-- Japanese page language
-- stable fixture identity
-- completed PASS / WARN / FAIL criteria
-- no remaining `TBD` in required fixture criteria
-
-### 3. Rendered browser validation
-
-Playwright renders the fixture set in:
-
-- desktop Chromium at 1440px width
-- a Pixel 7 mobile project explicitly using Chromium
-
-Common hard gate:
-
-- no document-level horizontal overflow
-
-Fixture-specific gates currently include:
-
-- dense tables keep wide overflow inside the table wrapper
-- forms expose labels, helper text, errors, and controls correctly
-- mobile-marked actions preserve at least 44px target height
-- technical docs keep code and table overflow inside their own scroll surfaces while callouts remain inspectable
-
-Every common rendered test captures a full-page screenshot and JSON render metrics. Failed browser runs retain Playwright trace Evidence.
-
-Rendered validation does not yet mean pixel-perfect visual regression. It verifies structural rendering properties and leaves aesthetic judgment to the scorecard and human review.
-
----
-
-## Fixtures
-
-The fixture strategy intentionally focuses on **failure modes**, not brands.
-
-### P0 — implemented and CI-gated
-
-- `long-paragraphs`
-- `mixed-script-headings`
-- `long-url-overflow`
-- `forms-ime-errors`
-
-### P1 — implemented and CI-gated
-
-- `dense-tables`
-- `mobile-wrap-stress`
-
-### P2 — implemented and CI-gated
-
-- `docs-prose-code`
-
-See [`fixtures/fixture-matrix.md`](fixtures/fixture-matrix.md).
-
----
-
-## Repository structure
-
-```text
-jp-ui-contracts/
-├─ README.md
-├─ CHANGELOG.md
-├─ CONTRIBUTING.md
-├─ package.json
-├─ playwright.config.mjs
-├─ docs/
-├─ templates/
-├─ recipes/
-├─ validators/
-│  ├─ contract.py
-│  ├─ lint-rules.md
-│  └─ scorecard.md
-├─ schema/
-├─ fixtures/
-├─ skills/
-├─ examples/
-├─ tests/
-│  └─ rendered/
-└─ .github/workflows/
-```
-
----
-
-## CI
-
-Pull requests run two independent validation jobs.
-
-### Contract validation
+例えばアプリがポート3000で動いている場合、検査ツール側のリポジトリで実行します。
 
 ```bash
-python validators/contract.py validate --strict ...
-python -m unittest discover -s tests -p "test_*.py" -v
+npm run check:ui -- --url http://127.0.0.1:3000/settings --width 412
+npm run check:ui -- --url http://127.0.0.1:3000/settings --width 1440
 ```
 
-### Rendered validation
+URLは実際の画面へ置き換えてください。SPAでは`--ready-selector`で目的画面の準備完了を待てます。新規ブラウザを使うので、普段のログイン状態は引き継ぎません。
+
+コピーするファイル、AIへの依頼文、契約ファイルの検査、画面の検査を[導入手順](docs/getting-started.md#4-自分の案件の契約を作る)で説明しています。
+
+## PASSの範囲
+
+| 検査 | 対象 | 分かること |
+|---|---|---|
+| `python validators/contract.py validate ...` | DESIGN.md | 必須情報や一部の禁止CSSが静的チェックを満たすか |
+| `npm run test:rendered` | このリポジトリのfixtureと回帰例 | 定義した画面と条件で、検査が期待どおりに働くか |
+| `npm run check:ui -- --url ...` | 自分で指定したローカル画面 | 指定幅で文書全体が横にはみ出していないか |
+
+**契約ファイルのPASS、リポジトリのCI成功、利用者の画面のPASSは、それぞれ別の結果です。**
+
+`check:ui`はDESIGN.mdの文字サイズや行間を自動照合しません。`overflow: hidden`で部品の内容を切り落とした画面も、文書が横に広がらなければPASSになります。美的品質、IME操作、アクセシビリティ全般、Firefox / WebKit、実機での適合も、この結果だけでは保証しません。
+
+自動検査と手動確認の対応、終了コード、Evidence、反例は[検証範囲](docs/validation-coverage.md)を参照してください。
+
+## 用途別テンプレート
+
+| Profile | 主な用途 | 重視すること |
+|---|---|---|
+| [base](templates/base/DESIGN.md) | 共通項目から設計する | 日本語の文字・改行・部品・検証条件 |
+| [media](templates/media/DESIGN.md) | 記事、ブログ | 長文を読むリズム |
+| [saas](templates/saas/DESIGN.md) | 管理画面、設定画面 | ラベル、フォーム、安定した密度 |
+| [docs](templates/docs/DESIGN.md) | 技術文書、ヘルプ | 本文・コード・表の共存 |
+| [dashboard](templates/dashboard/DESIGN.md) | KPI、監視画面 | 数値・表の走査性 |
+
+迷う場合は[profile selector](docs/profile-selector.md)を使えます。各profileへbaseの全項目が自動継承される仕組みはありません。必要な規則を選び、自分のDESIGN.mdへまとめてください。
+
+## 提供する部品
+
+- [CSS recipes](recipes/)：日本語本文、見出し、和欧混植、フォームのCSS断片
+- [7種類のfixture](fixtures/fixture-matrix.md)：長文、混植見出し、長いURL、フォーム、表、モバイル幅、技術文書
+- [Scorecard](validators/scorecard.md)：目視でPASS / WARN / FAILを判断する観点
+- [Agent Skill](skills/japanese-ui-contract-review/SKILL.md)：契約を読み、検証し、原因のある層を修正する手順。利用するエージェントへの適応が必要です。
+- [Examples](examples/)：設計例と、失敗・修正の実行例
+
+DESIGN.mdは人間が編集する契約です。機械処理に必要なら、メタデータと検証項目をJSONへ出力できます。
 
 ```bash
-npm install
-npx playwright install --with-deps chromium
-npm run test:rendered
+python validators/contract.py export ../my-app/DESIGN.md -o design-contract.json
 ```
 
-The rendered job uploads a `rendered-validation-evidence` artifact containing `test-results/` and the Playwright HTML report. CI Evidence is currently retained for 14 days.
+このJSONは生成物であり、別途手で編集する契約にはしません。契約全体を実行可能に変換するものでもありません。
 
----
+## 開発・保守
 
-## Feedback loop
+PR、mainへの変更、週次スケジュールで契約検証とブラウザテストを実行します。既存fixtureはデスクトップとPixel 7設定のChromiumで検査し、新しいCLIの回帰テストはデスクトップChromiumを指定幅に変更して実行します。
 
-Two Issue Forms are available:
+CIの`rendered-validation-evidence`には画像、JSONメトリクス、HTMLレポート、失敗時のtraceが含まれます。保存期間は14日です。READMEの比較画像と測定記録は`docs/images/`へ保存しています。
 
-- **Broken output report** — a current contract produced a reproducible Japanese UI failure
-- **Profile gap request** — an existing profile cannot express a repeated real-world requirement
+- [コントリビューション](CONTRIBUTING.md)
+- [保守の進め方](docs/maintenance.md)
+- [設計思想](docs/philosophy.md)
+- [変更履歴](CHANGELOG.md)
 
-A useful broken-output report should be promotable into a fixture or validator case. That is how the repository improves from real failures instead of adding rules speculatively.
+## 公開バージョン
 
----
+最新の公開リリースは[v0.2.0 — executable contract validation](https://github.com/hirokaji/jp-ui-contracts/releases/tag/v0.2.0)です。タグ対象は`ba4f44c65b18c27ba784d9171a80859f798c5c89`で、公開記録は維持しています。
 
-## After v0.2.0
-
-`v0.2.0` closes this first validation loop:
-
-```text
-contract → generation → static validation → rendered validation → evidence → contract update
-```
-
-The release decision is governed by [`docs/v0.2-release-gate.md`](docs/v0.2-release-gate.md).
-
-Current post-gate extensions include:
-
-1. decide whether cross-browser Firefox / WebKit checks should become a later hard gate
-2. evaluate pixel-baseline comparison separately from structural rendered checks
-3. improve profile-specific semantic validation
-4. add a hosted visual surface only if it helps review rather than turning the project into a catalog
-5. package the validator only if installation friction becomes a measured problem
-
-See [`CHANGELOG.md`](CHANGELOG.md) for implemented changes.
-
----
+今回の導入改善とローカルURL検査はmain上のUnreleasedです。[v0.2.0公開時の合格条件](docs/v0.2-release-gate.md)と、現在追加されている機能の範囲を区別してください。
 
 ## License
 
 MIT
-
-## Start here
-
-Copy `templates/base/DESIGN.md` or the closest profile, define the validation targets, then run:
-
-```bash
-python validators/contract.py validate DESIGN.md
-```
-
-The target is not a perfect first generation. The target is a UI contract that can explain a failure, preserve Evidence, and prevent the same failure from returning.

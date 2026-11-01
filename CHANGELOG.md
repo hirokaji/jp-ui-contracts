@@ -9,6 +9,7 @@ All notable changes to `jp-ui-contracts` are documented here.
 - Local-URL Chromium horizontal-overflow checker with separate PASS / FAIL / ERROR outcomes, per-run screenshot/JSON Evidence, and explicit untested scope.
 - CLI regression coverage for intended overflow, repaired output, HTTP and readiness failures, redirects, connection errors, and the hidden-content limitation.
 - Synthetic Japanese-label before/after walkthrough, beginner setup guide, and validation coverage map.
+- README comparison screenshots and measured results with commit/run provenance, plus separate user-app and repository-maintenance entry points.
 
 
 ### Changed
