@@ -1,6 +1,9 @@
 # examples
 
-このディレクトリには、最低限のサンプルを入れています。
+初めて試す場合は[overflow-walkthrough](overflow-walkthrough/README.md)から始めてください。
+同じ画面の不具合を検出し、修正後を再検査できます。[導入手順](../docs/getting-started.md)で自分のアプリへの適用まで説明しています。
+
+以下は設計例です。固定fixtureのCI成功を、これらの画面や導入先の適合証明として扱わないでください。
 
 - `sample-media/`
   - 記事メディア向けの例

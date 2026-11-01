@@ -9,3 +9,5 @@ coverage/
 playwright-report/
 test-results/
 *.log
+ui-evidence/
+__pycache__/

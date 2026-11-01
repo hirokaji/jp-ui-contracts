@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>日本語ラベルの折り返し — 修正後</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="after" data-ui-ready>
+  <main>
+    <p class="eyebrow">日本語UIの検証例 / 修正後</p>
+    <h1>通知設定</h1>
+    <p class="intro">同じ内容を、幅の狭い画面でも確認できるようにします。</p>
+    <section class="panel" aria-labelledby="settings-title">
+      <h2 id="settings-title">変更内容の確認</h2>
+      <label for="workspace">この設定を適用するワークスペース名</label>
+      <input id="workspace" value="製品開発チーム" readonly>
+      <p class="help">通知先と適用範囲を確認してから保存してください。</p>
+      <div class="actions">
+        <button class="action" type="button">選択したすべてのワークスペースに通知設定の変更を適用する</button>
+        <button class="action secondary" type="button">戻る</button>
+      </div>
+    </section>
+    <p class="note">検査対象は画面全体の横はみ出しです。読みやすさや操作性は別途確認します。</p>
+  </main>
+</body>
+</html>

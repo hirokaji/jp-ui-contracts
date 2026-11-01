@@ -1,0 +1,108 @@
+{
+  "generatedBy": "tests/rendered/adoption.spec.mjs",
+  "note": "Synthetic demonstration, not a reported production incident. Resized desktop Chromium; not Pixel 7 emulation.",
+  "before": {
+    "schemaVersion": 1,
+    "status": "FAIL",
+    "scope": "Document-level horizontal overflow at one viewport in Chromium",
+    "notChecked": [
+      "DESIGN.md conformance, typography and reading comfort",
+      "Clipped or hidden content, local component overflow and accessibility compliance",
+      "Native IME operation, other states, viewports and browsers"
+    ],
+    "startedAt": "2026-11-01T06:26:48.093Z",
+    "targetUrl": "http://127.0.0.1:4173/examples/overflow-walkthrough/before.html",
+    "viewport": {
+      "width": 412,
+      "height": 839
+    },
+    "readiness": {
+      "selector": "body",
+      "fonts": "loaded",
+      "timeoutMs": 15000
+    },
+    "checks": [
+      {
+        "id": "document-horizontal-overflow",
+        "status": "FAIL",
+        "excessPx": 137,
+        "tolerancePx": 1
+      }
+    ],
+    "browser": {
+      "name": "chromium",
+      "version": "156.0.8078.4"
+    },
+    "finalUrl": "http://127.0.0.1:4173/examples/overflow-walkthrough/before.html",
+    "httpStatus": 200,
+    "metrics": {
+      "title": "日本語ラベルの折り返し — 修正前",
+      "lang": "ja",
+      "clientWidth": 412,
+      "scrollWidth": 549,
+      "bodyScrollWidth": 549
+    },
+    "screenshot": "viewport.png",
+    "finishedAt": "2026-11-01T06:26:48.886Z"
+  },
+  "after": {
+    "schemaVersion": 1,
+    "status": "PASS",
+    "scope": "Document-level horizontal overflow at one viewport in Chromium",
+    "notChecked": [
+      "DESIGN.md conformance, typography and reading comfort",
+      "Clipped or hidden content, local component overflow and accessibility compliance",
+      "Native IME operation, other states, viewports and browsers"
+    ],
+    "startedAt": "2026-11-01T06:26:49.344Z",
+    "targetUrl": "http://127.0.0.1:4173/examples/overflow-walkthrough/after.html",
+    "viewport": {
+      "width": 412,
+      "height": 839
+    },
+    "readiness": {
+      "selector": "[data-ui-ready]",
+      "fonts": "loaded",
+      "timeoutMs": 15000
+    },
+    "checks": [
+      {
+        "id": "document-horizontal-overflow",
+        "status": "PASS",
+        "excessPx": 0,
+        "tolerancePx": 1
+      }
+    ],
+    "browser": {
+      "name": "chromium",
+      "version": "156.0.8078.4"
+    },
+    "finalUrl": "http://127.0.0.1:4173/examples/overflow-walkthrough/after.html",
+    "httpStatus": 200,
+    "metrics": {
+      "title": "日本語ラベルの折り返し — 修正後",
+      "lang": "ja",
+      "clientWidth": 412,
+      "scrollWidth": 412,
+      "bodyScrollWidth": 412
+    },
+    "screenshot": "viewport.png",
+    "finishedAt": "2026-11-01T06:26:49.650Z"
+  },
+  "provenance": {
+    "sourceCommit": "5a11d14845ee589ce195d5589877f25b80a33994",
+    "workflowRun": "https://github.com/hirokaji/jp-ui-contracts/actions/runs/41280827328",
+    "artifactId": 13073391534,
+    "artifactSha256": "c7ec91b0c194a8bca84cfa9cf7ca86873748a708343cd788e6b5fa2fa36869ff",
+    "images": {
+      "before": {
+        "path": "overflow-before.png",
+        "sha256": "8aa05b636806cce784db101cd5b29ae67fc08d7db1570d2b1cdc10610fd0e0b5"
+      },
+      "after": {
+        "path": "overflow-after.png",
+        "sha256": "080a45957f0ca05b41811b13723ed07de4864fdb73c853a9290951b0da8fb3dc"
+      }
+    }
+  }
+}
