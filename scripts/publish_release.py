@@ -1,4 +1,4 @@
-"""Publish v0.3.0 only from a verified main commit; never move an existing tag.
+"""Publish v0.3.1 only from a verified main commit; never move an existing tag.
 
 Runs in GitHub Actions with gh and GH_TOKEN. Default mode only verifies/downloads.
 No credentials or production service access are needed by the unit tests.
@@ -14,7 +14,7 @@ import subprocess
 import tempfile
 import zipfile
 
-VERSION = '0.3.0'
+VERSION = '0.3.1'
 TAG = 'v' + VERSION
 REPO = 'hirokaji/jp-ui-contracts'
 WORKFLOW = '.github/workflows/contract-validation.yml'
@@ -161,7 +161,7 @@ def main():
     notes = re.sub(r'\]\(\.\./([^)]*)\)', lambda m: f'](https://github.com/{REPO}/blob/{TAG}/docs/{m[1]})', notes)
     body = notes + '\n\n## Verified release commit\n\n' + f"Commit: `{args.sha}`\n\nCI: {run['html_url']}\n\nEvidence artifact: `{artifact['id']}`\n\nSHA-256: `{artifact['digest']}`\n\nThe original Evidence ZIP and release-verification.json are attached to this release.\n"
     if release is None:
-        release = gh_api(f'{base}/releases', {'tag_name': TAG, 'target_commitish': args.sha, 'name': TAG + ' — local UI checks and onboarding', 'body': body, 'draft': True, 'prerelease': False})
+        release = gh_api(f'{base}/releases', {'tag_name': TAG, 'target_commitish': args.sha, 'name': TAG + ' — verified UI validation', 'body': body, 'draft': True, 'prerelease': False})
     else:
         release = patch_release(f"{base}/releases/{release['id']}", {'body': body})
     with tempfile.TemporaryDirectory() as directory:
