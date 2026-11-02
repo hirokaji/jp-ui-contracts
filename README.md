@@ -136,6 +136,8 @@ CIの`rendered-validation-evidence`には画像、JSONメトリクス、HTMLレ�
 
 機能と制約は[リリースノート](docs/releases/v0.3.0.md)、検証方法は[手動公開の手順・条件](docs/v0.3-release-gate.md)を参照してください。rootの`RELEASE_MANIFEST.json`はタグ作成前の候補メタデータとして固定し、実際の公開記録はGitHub Releaseと添付の検証記録で管理します。
 
+mainでは次版[v0.3.1候補](docs/releases/v0.3.1.md)を準備中です。未公開のため、上記導入手順は公開済みv0.3.0のままです。v0.3.0のmanifestは[履歴](docs/releases/v0.3.0-manifest.json)に保全しています。次版には、新しい最終mainコミットのCIとEvidenceによる別途の公開判定が必要です。
+
 以前の[v0.2.0](https://github.com/hirokaji/jp-ui-contracts/releases/tag/v0.2.0)のタグ・公開記録は維持しています。
 
 ## License

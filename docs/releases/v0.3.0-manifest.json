@@ -1,0 +1,83 @@
+{
+  "schema_version": "1.0",
+  "project": "jp-ui-contracts",
+  "version": "0.3.0",
+  "release_date": null,
+  "previous_release": "v0.2.0",
+  "target_ref": "main",
+  "release_candidate_baseline_commit": "172d1bcfaf0ae0a702b0fde02b18cc441829c88f",
+  "editable_contract_source": "DESIGN.md",
+  "generated_projection_schema": "schema/design-contract.schema.json",
+  "profiles": [
+    "base",
+    "media",
+    "saas",
+    "docs",
+    "dashboard"
+  ],
+  "required_fixtures": {
+    "P0": [
+      "long-paragraphs",
+      "mixed-script-headings",
+      "long-url-overflow",
+      "forms-ime-errors"
+    ],
+    "P1": [
+      "dense-tables",
+      "mobile-wrap-stress"
+    ],
+    "P2": [
+      "docs-prose-code"
+    ]
+  },
+  "validation": {
+    "contract_gate": "required",
+    "fixture_completeness_gate": "required",
+    "rendered_gate": "required",
+    "browser_projects": [
+      "desktop-chromium",
+      "mobile-chromium-pixel-7"
+    ],
+    "evidence_artifact": "rendered-validation-evidence",
+    "evidence_retention_days": 14,
+    "cli_argument_gate": "required",
+    "local_ui_regression_gate": "required",
+    "release_evidence_record": "release-verification.json attached to the GitHub Release",
+    "release_evidence_archive": "rendered-validation-evidence.zip attached to the GitHub Release"
+  },
+  "release_gate": {
+    "spec": "docs/v0.3-release-gate.md",
+    "gates": {
+      "A_contract_integrity": "required_on_release_commit",
+      "B_fixture_completeness": "required_on_release_commit",
+      "C_rendered_validation": "required_on_release_commit",
+      "D_evidence_retention": "required_on_release_commit",
+      "E_documentation_consistency": "required_on_release_commit"
+    },
+    "release_candidate_rule": "The v0.3.0 tag must target the final main commit containing this manifest after the release-candidate pull request passes the same required gates. The final main run and Evidence must be verified before manual publication.",
+    "publication_gate": "pending_manual_verification"
+  },
+  "maintenance": {
+    "scheduled_validation": "weekly",
+    "dependency_updates": "dependabot",
+    "agent_repository_contract": "AGENTS.md"
+  },
+  "rollback": {
+    "target": "v0.2.0",
+    "note": "Existing DESIGN.md files need no migration. Returning to v0.2.0 removes the new local-URL CLI while preserving the original static and fixture validation."
+  },
+  "known_non_goals": [
+    "pixel-perfect screenshot baseline comparison",
+    "Firefox/WebKit release gating",
+    "automated visual-diff approval",
+    "package-manager distribution of the validator",
+    "hosted fixture gallery"
+  ],
+  "publication": {
+    "status": "candidate",
+    "tag": "v0.3.0",
+    "release_url": "https://github.com/hirokaji/jp-ui-contracts/releases/tag/v0.3.0",
+    "verification_record": "release-verification.json",
+    "note": "Candidate metadata is frozen at the tagged commit. Actual publication state and final commit/run/artifact association are recorded in the GitHub Release and its attached verification record."
+  }
+}

@@ -1,11 +1,11 @@
 {
   "schema_version": "1.0",
   "project": "jp-ui-contracts",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "release_date": null,
-  "previous_release": "v0.2.0",
+  "previous_release": "v0.3.0",
   "target_ref": "main",
-  "release_candidate_baseline_commit": "172d1bcfaf0ae0a702b0fde02b18cc441829c88f",
+  "release_candidate_baseline_commit": "8417bc2c58a0d89b02debfddc58de9a15fa83e76",
   "editable_contract_source": "DESIGN.md",
   "generated_projection_schema": "schema/design-contract.schema.json",
   "profiles": [
@@ -54,7 +54,7 @@
       "D_evidence_retention": "required_on_release_commit",
       "E_documentation_consistency": "required_on_release_commit"
     },
-    "release_candidate_rule": "The v0.3.0 tag must target the final main commit containing this manifest after the release-candidate pull request passes the same required gates. The final main run and Evidence must be verified before manual publication.",
+    "release_candidate_rule": "The v0.3.1 tag must target the final main commit containing this manifest after the release-candidate pull request passes the same required gates. The final main run and Evidence must be verified before manual publication. Do not reuse a previous release run, artifact or verification record.",
     "publication_gate": "pending_manual_verification"
   },
   "maintenance": {
@@ -63,8 +63,8 @@
     "agent_repository_contract": "AGENTS.md"
   },
   "rollback": {
-    "target": "v0.2.0",
-    "note": "Existing DESIGN.md files need no migration. Returning to v0.2.0 removes the new local-URL CLI while preserving the original static and fixture validation."
+    "target": "v0.3.0",
+    "note": "Existing DESIGN.md files need no migration. Returning to v0.3.0 retains the local-URL CLI but restores the old fixed-width publication evidence check."
   },
   "known_non_goals": [
     "pixel-perfect screenshot baseline comparison",
@@ -75,8 +75,8 @@
   ],
   "publication": {
     "status": "candidate",
-    "tag": "v0.3.0",
-    "release_url": "https://github.com/hirokaji/jp-ui-contracts/releases/tag/v0.3.0",
+    "tag": "v0.3.1",
+    "release_url": "https://github.com/hirokaji/jp-ui-contracts/releases/tag/v0.3.1",
     "verification_record": "release-verification.json",
     "note": "Candidate metadata is frozen at the tagged commit. Actual publication state and final commit/run/artifact association are recorded in the GitHub Release and its attached verification record."
   }

@@ -4,6 +4,8 @@ All notable changes to `jp-ui-contracts` are documented here.
 
 ## [Unreleased]
 
+- Prepare v0.3.1 candidate metadata, matching publisher/tests and release notes. Not published; a new final-main CI run and Evidence are required. Preserve the v0.3.0 manifest byte-for-byte and retain its published tag/assets.
+
 - Validate publication walkthrough overflow with the CLI's 1px tolerance instead of requiring the captured before width of 549px. Retain the 412px Chromium gate, check evidence consistency and preserve observed widths. Add local regression coverage; published v0.3.0 artifacts remain unchanged.
 
 Documentation now points to the published v0.3.0 release and its retained Evidence; the quick start selects the v0.3.0 tag. The documentation update itself has no runtime changes.
