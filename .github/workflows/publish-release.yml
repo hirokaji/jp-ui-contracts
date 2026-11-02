@@ -1,0 +1,55 @@
+name: publish-release
+
+on:
+  workflow_dispatch:
+    inputs:
+      candidate_sha:
+        description: 'Full SHA of the verified current main commit'
+        required: true
+        type: string
+      validation_run_id:
+        description: 'Successful contract-validation main run ID for this exact SHA'
+        required: true
+        type: string
+      publish:
+        description: 'Publish v0.3.0 after verifying and attaching Evidence (false = verification only)'
+        required: true
+        default: false
+        type: boolean
+
+concurrency:
+  group: publish-release
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  publish:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: write
+      actions: read
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.12'
+      - name: Verify candidate and optionally publish with retained Evidence
+        env:
+          GH_TOKEN: ${{ github.token }}
+          CANDIDATE_SHA: ${{ inputs.candidate_sha }}
+          VALIDATION_RUN_ID: ${{ inputs.validation_run_id }}
+          PUBLISH: ${{ inputs.publish }}
+        run: |
+          set -euo pipefail
+          args=(--sha "$CANDIDATE_SHA" --run-id "$VALIDATION_RUN_ID")
+          if [ "$PUBLISH" = "true" ]; then
+            args+=(--publish)
+          fi
+          python scripts/publish_release.py "${args[@]}"

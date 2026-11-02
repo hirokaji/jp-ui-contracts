@@ -132,9 +132,9 @@ CIの`rendered-validation-evidence`には画像、JSONメトリクス、HTMLレ�
 
 最新の公開リリースは[v0.2.0 — executable contract validation](https://github.com/hirokaji/jp-ui-contracts/releases/tag/v0.2.0)です。タグ対象は`ba4f44c65b18c27ba784d9171a80859f798c5c89`で、公開記録は維持しています。
 
-今回の導入改善とローカルURL検査はmain上のUnreleasedです。[v0.2.0公開時の合格条件](docs/v0.2-release-gate.md)と、現在追加されている機能の範囲を区別してください。
+今回の導入改善とローカルURL検査はmain上のv0.3.0候補版です。[v0.2.0公開時の合格条件](docs/v0.2-release-gate.md)と、現在追加されている機能の範囲を区別してください。
 
-次版v0.3.0の[リリースノート案](docs/releases/v0.3.0-draft.md)と[公開条件](docs/v0.3-release-gate.md)を準備しています。まだ新しいタグ・リリースは公開していません。
+v0.3.0の[リリースノート](docs/releases/v0.3.0.md)と[手動公開の手順・条件](docs/v0.3-release-gate.md)を整備しました。公開完了までは候補版です。
 
 ## License
 
