@@ -10,6 +10,6 @@
     "test:cli": "node --test tests/overflow-options.test.mjs"
   },
   "devDependencies": {
-    "@playwright/test": "1.64.0"
+    "@playwright/test": "1.64.1"
   }
 }
