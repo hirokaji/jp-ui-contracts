@@ -1,9 +1,10 @@
+import hashlib
 import json
 import unittest
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-EXPECTED_VERSION = "0.2.0"
+EXPECTED_VERSION = "0.3.0"
 EXPECTED_FIXTURES = {
     "long-paragraphs",
     "mixed-script-headings",
@@ -27,8 +28,8 @@ class ReleaseMetadataTests(unittest.TestCase):
         self.assertEqual(self.manifest["version"], EXPECTED_VERSION)
 
     def test_manifest_names_previous_release_and_rollback(self):
-        self.assertEqual(self.manifest["previous_release"], "v0.1.0")
-        self.assertEqual(self.manifest["rollback"]["target"], "v0.1.0")
+        self.assertEqual(self.manifest["previous_release"], "v0.2.0")
+        self.assertEqual(self.manifest["rollback"]["target"], "v0.2.0")
 
     def test_manifest_fixture_set_matches_release_gate(self):
         configured = set()
@@ -40,8 +41,17 @@ class ReleaseMetadataTests(unittest.TestCase):
             self.assertTrue((ROOT / "fixtures" / name / "README.md").is_file())
 
     def test_release_notes_and_gate_exist(self):
-        self.assertTrue((ROOT / "docs" / "releases" / "v0.2.0.md").is_file())
-        self.assertTrue((ROOT / "docs" / "v0.2-release-gate.md").is_file())
+        self.assertTrue((ROOT / "docs" / "releases" / "v0.3.0.md").is_file())
+        self.assertTrue((ROOT / "docs" / "v0.3-release-gate.md").is_file())
+
+    def test_historical_manifest_is_preserved(self):
+        archived = ROOT / "docs" / "releases" / "v0.2.0-manifest.json"
+        self.assertEqual(hashlib.sha256(archived.read_bytes()).hexdigest(), "469b6929c62b17f22d866f73ede19866a79035d2fbaba22e968566509924ee34")
+
+    def test_candidate_does_not_reuse_old_verification(self):
+        self.assertEqual(self.manifest["publication"]["status"], "candidate")
+        self.assertFalse(any(key.startswith("last_verified_") for key in self.manifest["validation"]))
+        self.assertEqual(self.manifest["release_gate"]["publication_gate"], "pending_manual_verification")
 
     def test_manifest_requires_final_post_rc_gate(self):
         rule = self.manifest["release_gate"]["release_candidate_rule"]

@@ -4,6 +4,12 @@ All notable changes to `jp-ui-contracts` are documented here.
 
 ## [Unreleased]
 
+No changes beyond the v0.3.0 candidate below.
+
+## [0.3.0] — release candidate
+
+Not published yet. Publication requires the exact main commit and Evidence to pass the manual release gate.
+
 ### Added
 
 - Local-URL Chromium horizontal-overflow checker with separate PASS / FAIL / ERROR outcomes, per-run screenshot/JSON Evidence, and explicit untested scope.
@@ -18,9 +24,11 @@ All notable changes to `jp-ui-contracts` are documented here.
 - Update the pinned `@playwright/test` development dependency from 1.63.0 to 1.64.1.
 - Keep the existing Japanese UI contracts, desktop/Pixel 7 Chromium gates, and screenshot/JSON/report Evidence workflow unchanged.
 
-### Release preparation
+### Publication safeguards
 
-- Prepare the proposed v0.3.0 [release notes](docs/releases/v0.3.0-draft.md) and [publication gate](docs/v0.3-release-gate.md), including exact-commit Evidence requirements and protection of v0.2.0 records. No new version is published by this preparation.
+- Finalize the v0.3.0 [release notes](docs/releases/v0.3.0.md) and [publication gate](docs/v0.3-release-gate.md).
+- Add a manual publisher that verifies the exact main commit/run/artifact, preserves the original Evidence ZIP as a release asset, and refuses conflicting tags or mismatched assets.
+- Preserve the v0.2.0 manifest unchanged and retire its metadata writer. Add publication guard and historical-preservation regression tests.
 
 ## [0.2.0] — 2026-09-14
 

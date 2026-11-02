@@ -78,12 +78,12 @@ If there is no new evidence, do not change defaults merely to create activity.
 
 Before a release:
 
-1. satisfy `docs/v0.2-release-gate.md` or the current release gate
+1. satisfy `docs/v0.3-release-gate.md`, including retained v0.2 contract/fixture gates
 2. confirm main CI is green on the release candidate commit
 3. confirm Evidence artifact exists
 4. update CHANGELOG from Unreleased to the release version/date
 5. ensure README Status matches the published release
-6. create the tag / GitHub Release
+6. invoke the manual `publish-release` verification-only run, then publication with the verified SHA/run ID; retain Evidence as release assets
 7. only then announce the release externally
 
 ## Maintenance principle
@@ -93,4 +93,4 @@ The repository should improve from observed failures, not from maintenance theat
 ## Recent verification
 
 - [2026-11-02 dependency verification](maintenance/2026-11-02-dependencies.md): setup-python v7 and Playwright 1.64.1, sequential integration and Evidence review.
-- [Proposed v0.3 publication gate](v0.3-release-gate.md) and [release-note draft](releases/v0.3.0-draft.md).
+- [v0.3 publication gate](v0.3-release-gate.md) and [release notes](releases/v0.3.0.md).

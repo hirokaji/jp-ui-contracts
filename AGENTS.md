@@ -17,7 +17,7 @@ DESIGN.md → generation → static validation → rendered validation → Evide
 When changing behavior, read in this order:
 
 1. the target `DESIGN.md`
-2. `docs/v0.2-release-gate.md`
+2. `docs/v0.3-release-gate.md` (retains the original `docs/v0.2-release-gate.md` contract/fixture gates)
 3. the relevant fixture README and `index.html`
 4. `validators/contract.py` and validator docs
 5. `fixtures/fixture-matrix.md`
