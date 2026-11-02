@@ -35,10 +35,10 @@ Japanese UI design contracts and focused browser checks for AI-assisted developm
 
 ## 試す
 
-Git・Node.js 22・Python 3.12を使う手順です。以下は現在のmain向けで、公開済みv0.2.0には新しい`check:ui`コマンドは含まれません。
+Git・Node.js 22・Python 3.12を使い、公開済みv0.3.0を試す手順です。`check:ui`はv0.3.0から利用できます。
 
 ```bash
-git clone https://github.com/hirokaji/jp-ui-contracts.git
+git clone --branch v0.3.0 https://github.com/hirokaji/jp-ui-contracts.git
 cd jp-ui-contracts
 npm install --ignore-scripts --no-audit --no-fund
 npx playwright install chromium
@@ -121,7 +121,7 @@ python validators/contract.py export ../my-app/DESIGN.md -o design-contract.json
 
 PR、mainへの変更、週次スケジュールで契約検証とブラウザテストを実行します。既存fixtureはデスクトップとPixel 7設定のChromiumで検査し、新しいCLIの回帰テストはデスクトップChromiumを指定幅に変更して実行します。
 
-CIの`rendered-validation-evidence`には画像、JSONメトリクス、HTMLレポート、失敗時のtraceが含まれます。保存期間は14日です。READMEの比較画像と測定記録は`docs/images/`へ保存しています。
+CIの`rendered-validation-evidence`には画像、JSONメトリクス、HTMLレポート、失敗時のtraceが含まれます。CIでの保存期間は14日です。v0.3.0の公開判定に使ったEvidence ZIPと検証記録は[リリースの添付ファイル](https://github.com/hirokaji/jp-ui-contracts/releases/tag/v0.3.0)にも保存しています。READMEの比較画像と測定記録は`docs/images/`へ保存しています。
 
 - [コントリビューション](CONTRIBUTING.md)
 - [保守の進め方](docs/maintenance.md)
@@ -130,11 +130,13 @@ CIの`rendered-validation-evidence`には画像、JSONメトリクス、HTMLレ�
 
 ## 公開バージョン
 
-最新の公開リリースは[v0.2.0 — executable contract validation](https://github.com/hirokaji/jp-ui-contracts/releases/tag/v0.2.0)です。タグ対象は`ba4f44c65b18c27ba784d9171a80859f798c5c89`で、公開記録は維持しています。
+最新の公開リリースは[v0.3.0 — local UI checks and onboarding](https://github.com/hirokaji/jp-ui-contracts/releases/tag/v0.3.0)です。2026年11月2日に公開しました。タグ対象は`ace9117f06ee337524dcaca097aa9372a73570e1`です。
 
-今回の導入改善とローカルURL検査はmain上のv0.3.0候補版です。[v0.2.0公開時の合格条件](docs/v0.2-release-gate.md)と、現在追加されている機能の範囲を区別してください。
+[対象コミットのCI](https://github.com/hirokaji/jp-ui-contracts/actions/runs/41414252638)と[公開処理](https://github.com/hirokaji/jp-ui-contracts/actions/runs/41417707636)は成功しています。リリースには`rendered-validation-evidence.zip`と`release-verification.json`を添付し、コミット・CI・Evidenceの対応を確認できるようにしています。
 
-v0.3.0の[リリースノート](docs/releases/v0.3.0.md)と[手動公開の手順・条件](docs/v0.3-release-gate.md)を整備しました。公開完了までは候補版です。
+機能と制約は[リリースノート](docs/releases/v0.3.0.md)、検証方法は[手動公開の手順・条件](docs/v0.3-release-gate.md)を参照してください。rootの`RELEASE_MANIFEST.json`はタグ作成前の候補メタデータとして固定し、実際の公開記録はGitHub Releaseと添付の検証記録で管理します。
+
+以前の[v0.2.0](https://github.com/hirokaji/jp-ui-contracts/releases/tag/v0.2.0)のタグ・公開記録は維持しています。
 
 ## License
 

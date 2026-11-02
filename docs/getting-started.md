@@ -6,14 +6,16 @@
 
 ## 1. 準備する
 
-Git、Node.js 22、Python 3.12を使用する手順です。Windows PowerShellとmacOS/Linuxのターミナルで、以下を一行ずつ実行できます。初回の依存関係・Chromium取得にはインターネット接続が必要です。
+Git、Node.js 22、Python 3.12を使用し、公開済みv0.3.0を取得する手順です。Windows PowerShellとmacOS/Linuxのターミナルで、以下を一行ずつ実行できます。初回の依存関係・Chromium取得にはインターネット接続が必要です。
 
 ```bash
-git clone https://github.com/hirokaji/jp-ui-contracts.git
+git clone --branch v0.3.0 https://github.com/hirokaji/jp-ui-contracts.git
 cd jp-ui-contracts
 npm install --ignore-scripts --no-audit --no-fund
 npx playwright install chromium
 ```
+
+タグを取得するため、Gitが`detached HEAD`と表示することがあります。この版を試すだけなら問題ありません。検査ツール自体を変更する場合は、作業ブランチを作成してください。
 
 Linuxでブラウザの共有ライブラリ不足になる場合は、管理者がシステム依存を用意するか、`npx playwright install --with-deps chromium`を使用します。管理者権限を使えない環境で無理にインストールしないでください。Pythonの契約検査には追加パッケージは不要です。
 

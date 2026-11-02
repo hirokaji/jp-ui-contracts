@@ -4,11 +4,13 @@ All notable changes to `jp-ui-contracts` are documented here.
 
 ## [Unreleased]
 
-No changes beyond the v0.3.0 candidate below.
+Documentation now points to the published v0.3.0 release and its retained Evidence; the quick start selects the v0.3.0 tag. No runtime changes.
 
-## [0.3.0] — release candidate
+## [0.3.0] — 2026-11-02
 
-Not published yet. Publication requires the exact main commit and Evidence to pass the manual release gate.
+Published as [v0.3.0 — local UI checks and onboarding](https://github.com/hirokaji/jp-ui-contracts/releases/tag/v0.3.0).
+
+Release tag target: `ace9117f06ee337524dcaca097aa9372a73570e1`. [Main validation](https://github.com/hirokaji/jp-ui-contracts/actions/runs/41414252638) and [manual publication](https://github.com/hirokaji/jp-ui-contracts/actions/runs/41417707636) succeeded. The original `rendered-validation-evidence.zip` and `release-verification.json` are attached to the release.
 
 ### Added
 
