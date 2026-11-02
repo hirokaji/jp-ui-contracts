@@ -14,8 +14,13 @@ All notable changes to `jp-ui-contracts` are documented here.
 
 ### Changed
 
-- Update the pinned `@playwright/test` development dependency from 1.63.0 to 1.64.0.
+- Upgrade actions/checkout, actions/setup-node, actions/upload-artifact and actions/setup-python to v7.
+- Update the pinned `@playwright/test` development dependency from 1.63.0 to 1.64.1.
 - Keep the existing Japanese UI contracts, desktop/Pixel 7 Chromium gates, and screenshot/JSON/report Evidence workflow unchanged.
+
+### Release preparation
+
+- Prepare the proposed v0.3.0 [release notes](docs/releases/v0.3.0-draft.md) and [publication gate](docs/v0.3-release-gate.md), including exact-commit Evidence requirements and protection of v0.2.0 records. No new version is published by this preparation.
 
 ## [0.2.0] — 2026-09-14
 

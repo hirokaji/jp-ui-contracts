@@ -89,3 +89,8 @@ Before a release:
 ## Maintenance principle
 
 The repository should improve from observed failures, not from maintenance theater. Automation detects drift; humans decide whether evidence deserves a new contract rule.
+
+## Recent verification
+
+- [2026-11-02 dependency verification](maintenance/2026-11-02-dependencies.md): setup-python v7 and Playwright 1.64.1, sequential integration and Evidence review.
+- [Proposed v0.3 publication gate](v0.3-release-gate.md) and [release-note draft](releases/v0.3.0-draft.md).

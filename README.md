@@ -134,6 +134,8 @@ CIの`rendered-validation-evidence`には画像、JSONメトリクス、HTMLレ�
 
 今回の導入改善とローカルURL検査はmain上のUnreleasedです。[v0.2.0公開時の合格条件](docs/v0.2-release-gate.md)と、現在追加されている機能の範囲を区別してください。
 
+次版v0.3.0の[リリースノート案](docs/releases/v0.3.0-draft.md)と[公開条件](docs/v0.3-release-gate.md)を準備しています。まだ新しいタグ・リリースは公開していません。
+
 ## License
 
 MIT
