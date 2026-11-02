@@ -64,10 +64,23 @@ def inspect_evidence(data, expected_digest):
         paths = [n for n in names if n.endswith('/walkthrough/measurements.json')]
         require(len(paths) == 1, 'Walkthrough measurements absent/ambiguous')
         m = json.loads(archive.read(paths[0]))
-        for state, expected, width in [('before', 'FAIL', 549), ('after', 'PASS', 412)]:
+        for state, expected in [('before', 'FAIL'), ('after', 'PASS')]:
             result = m[state]
             require(result['status'] == expected, 'Walkthrough outcome changed')
-            require(result['metrics']['clientWidth'] == 412 and result['metrics']['scrollWidth'] == width, 'Walkthrough measurements changed')
+            metrics = result['metrics']
+            require(all(type(metrics.get(key)) is int and metrics[key] > 0
+                        for key in ('clientWidth', 'scrollWidth')), 'Invalid walkthrough widths')
+            require(type(result['viewport']['width']) is int and result['viewport']['width'] == 412
+                    and metrics['clientWidth'] == 412, 'Unexpected walkthrough viewport')
+            # Match validators/overflow.mjs: font-dependent widths are observations,
+            # not a pixel baseline; one pixel of excess is within tolerance.
+            excess = metrics['scrollWidth'] - metrics['clientWidth']
+            require((excess > 1) == (expected == 'FAIL'), 'Walkthrough overflow changed')
+            checks = [c for c in result['checks'] if c.get('id') == 'document-horizontal-overflow']
+            require(len(checks) == 1 and checks[0].get('status') == expected
+                    and type(checks[0].get('excessPx')) is int and type(checks[0].get('tolerancePx')) is int
+                    and checks[0].get('excessPx') == excess and checks[0].get('tolerancePx') == 1,
+                    'Inconsistent walkthrough overflow check')
             require(result['browser']['name'] == 'chromium', 'Unexpected browser')
         return {'before': m['before']['metrics'], 'after': m['after']['metrics'], 'browser': m['after']['browser']}
 

@@ -20,8 +20,11 @@ def provenance():
     return run, jobs, artifact
 
 
-def evidence(entries=None):
-    measurements = {key: {'status': status, 'metrics': {'clientWidth': 412, 'scrollWidth': width}, 'browser': {'name': 'chromium'}}
+def evidence(entries=None, measurements=None):
+    measurements = measurements if measurements is not None else {key: {'status': status, 'metrics': {'clientWidth': 412, 'scrollWidth': width}, 'browser': {'name': 'chromium'},
+                         'viewport': {'width': 412, 'height': 839},
+                         'checks': [{'id': 'document-horizontal-overflow', 'status': status,
+                                     'excessPx': width - 412, 'tolerancePx': 1}]}
                     for key, status, width in [('before', 'FAIL', 549), ('after', 'PASS', 412)]}
     items = {'playwright-report/index.html': '<html>report</html>', 'test-results/screenshot.png': b'fixture-placeholder',
              'test-results/example/walkthrough/measurements.json': json.dumps(measurements)}
@@ -82,6 +85,69 @@ class PublicationGateTests(unittest.TestCase):
         self.assertEqual(inspect_evidence(data, digest(data))['after']['scrollWidth'], 412)
         with self.assertRaises(ValueError):
             inspect_evidence(data, 'sha256:' + '0' * 64)
+
+    def walkthrough(self):
+        with zipfile.ZipFile(io.BytesIO(evidence())) as archive:
+            return json.loads(archive.read('test-results/example/walkthrough/measurements.json'))
+
+    def test_accepts_variable_before_width_and_preserves_observations(self):
+        for width in [414, 548, 549, 550, 600]:
+            for after_width in [412, 413]:
+                with self.subTest(before=width, after=after_width):
+                    m = self.walkthrough()
+                    for state, measured in [('before', width), ('after', after_width)]:
+                        m[state]['metrics']['scrollWidth'] = measured
+                        m[state]['checks'][0]['excessPx'] = measured - 412
+                    data = evidence(measurements=m)
+                    observed = inspect_evidence(data, digest(data))
+                    self.assertEqual(observed['before'], m['before']['metrics'])
+                    self.assertEqual(observed['after'], m['after']['metrics'])
+
+    def test_rejects_wrong_overflow_behavior(self):
+        for state, width in [('before', 412), ('before', 413), ('after', 414), ('after', 549)]:
+            with self.subTest(state=state, width=width):
+                m = self.walkthrough()
+                m[state]['metrics']['scrollWidth'] = width
+                m[state]['checks'][0]['excessPx'] = width - 412
+                data = evidence(measurements=m)
+                with self.assertRaises(ValueError):
+                    inspect_evidence(data, digest(data))
+
+    def test_rejects_inconsistent_walkthrough_evidence(self):
+        variants = [('viewport', 'width', 1440), ('metrics', 'clientWidth', 411),
+                    ('browser', 'name', 'firefox'), ('check', 'status', 'ERROR'),
+                    ('check', 'excessPx', 999), ('check', 'tolerancePx', 2),
+                    ('check', 'id', 'other'), ('viewport', 'width', 412.0),
+                    ('check', 'tolerancePx', True), ('check', 'tolerancePx', 1.0),
+                    ('check', 'excessPx', False), ('check', 'excessPx', 0.0),
+                    ('check', 'excessPx', 137.0)]
+        for state in ['before', 'after']:
+            for section, key, value in variants:
+                with self.subTest(state=state, section=section, key=key):
+                    m = self.walkthrough()
+                    target = m[state]['checks'][0] if section == 'check' else m[state][section]
+                    target[key] = value
+                    data = evidence(measurements=m)
+                    with self.assertRaises(ValueError):
+                        inspect_evidence(data, digest(data))
+            original_checks = self.walkthrough()[state]['checks']
+            for checks in [[], original_checks * 2]:
+                m = self.walkthrough()
+                m[state]['checks'] = checks
+                data = evidence(measurements=m)
+                with self.assertRaises(ValueError):
+                    inspect_evidence(data, digest(data))
+
+    def test_rejects_non_integer_or_nonpositive_widths(self):
+        for state in ['before', 'after']:
+            for key in ['clientWidth', 'scrollWidth']:
+                for value in [True, False, None, '549', 549.0, -1, 0, float('nan'), float('inf')]:
+                    with self.subTest(state=state, key=key, value=value):
+                        m = self.walkthrough()
+                        m[state]['metrics'][key] = value
+                        data = evidence(measurements=m)
+                        with self.assertRaises(ValueError):
+                            inspect_evidence(data, digest(data))
 
     def test_rejects_missing_and_unsafe_archive_content(self):
         for entries in [{}, {'../outside': 'bad'}, {'/absolute': 'bad'}, {'x\\y': 'bad'}, {'playwright-report/index.html': 'only report'}]:
