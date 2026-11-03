@@ -4,11 +4,20 @@ All notable changes to `jp-ui-contracts` are documented here.
 
 ## [Unreleased]
 
-- Prepare v0.3.1 candidate metadata, matching publisher/tests and release notes. Not published; a new final-main CI run and Evidence are required. Preserve the v0.3.0 manifest byte-for-byte and retain its published tag/assets.
+- Add conditional visual review: separate required contract failures from contextual recommendations; retain source attribution for adapted review cues.
+- Add a synthetic notification-settings before/after example with shared content and behavior across normal, long, empty and error states.
+- Read opt-in measured elements directly from DESIGN.md; check font size, line height and local overflow with negative regression cases and screenshot/JSON Evidence. The local-URL CLI remains unchanged.
+- Add one strict example contract and 16 browser cases across the two Chromium projects; retain all existing fixture and CLI coverage.
+- Align current documentation with the published v0.3.1 release; preserve frozen preparation metadata and all published tags/assets.
 
-- Validate publication walkthrough overflow with the CLI's 1px tolerance instead of requiring the captured before width of 549px. Retain the 412px Chromium gate, check evidence consistency and preserve observed widths. Add local regression coverage; published v0.3.0 artifacts remain unchanged.
+## [0.3.1] — 2026-11-02
 
-Documentation now points to the published v0.3.0 release and its retained Evidence; the quick start selects the v0.3.0 tag. The documentation update itself has no runtime changes.
+Published as [v0.3.1](https://github.com/hirokaji/jp-ui-contracts/releases/tag/v0.3.1) at `1a6b1e2baed6217aba649927669e03f5cb159f35`.
+
+[Main validation](https://github.com/hirokaji/jp-ui-contracts/actions/runs/41427743810), [verification only](https://github.com/hirokaji/jp-ui-contracts/actions/runs/41428191857) and [publication](https://github.com/hirokaji/jp-ui-contracts/actions/runs/41429015097) succeeded. Evidence artifact: `13132727036`. Strict contracts: 7; Python: 30; CLI: passed; browser: 27 passed, 1 intentional skip. The release retains its own Evidence ZIP and verification JSON, without reusing v0.3.0 Evidence.
+
+- Validate publication walkthrough overflow with the CLI's 1px tolerance instead of requiring the captured before width of 549px. Retain the 412px Chromium gate, check evidence consistency and preserve observed widths.
+- Preserve v0.3.0 manifest, tag and published assets. Candidate metadata and preparation notes remain frozen historical inputs; the GitHub Release records publication.
 
 ## [0.3.0] — 2026-11-02
 

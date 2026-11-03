@@ -15,7 +15,7 @@ Minor polish may remain, but the contract and implementation are directionally s
 
 ### WARN
 The output is usable, but the contract is underspecified or the implementation needs tightening.
-A future failure is likely unless the rule is clarified.
+A future failure is likely unless the rule is clarified. Required checks with insufficient Evidence are also WARN; acceptance remains pending. WARN must not imply usability was verified.
 
 ### FAIL
 The output violates the contract, breaks readability or usability, or reveals that the contract is missing a required rule.
@@ -62,6 +62,8 @@ Check:
 - Table
 - Form
 - Mobile width
+
+For visual cues such as repeated cards or decorative gradients, use [conditional visual review](../docs/conditional-visual-review.md). Record the observation, task impact and reason to keep or change it; aesthetic preference alone is not a contract FAIL.
 
 ### Step 3. Contract return
 Every WARN or FAIL should be returned to one of these buckets:

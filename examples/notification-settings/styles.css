@@ -1,0 +1,33 @@
+:root { font-family: "Noto Sans JP", "Yu Gothic UI", Meiryo, sans-serif; color: #243329; background: #f3f5f2; }
+* { box-sizing: border-box; }
+body { margin: 0; padding: 24px 16px; font-size: 16px; line-height: 1.6; }
+main { max-width: 760px; margin: 0 auto; }
+h1 { font-size: 28px; line-height: 1.4; margin: 8px 0 12px; }
+p { overflow-wrap: anywhere; }
+.eyebrow, .help, .demo-note { color: #526157; }
+.eyebrow { font-size: 14px; }
+.demo-note { font-size: 14px; border-left: 3px solid #a5b6a7; padding-left: 12px; }
+form { margin-top: 28px; }
+.field { padding: 24px; min-width: 0; background: white; border: 1px solid #c8d2ca; }
+label { display: block; font-size: 16px; line-height: 1.6; overflow-wrap: anywhere; }
+.help { margin: 8px 0 12px; font-size: 14px; }
+input:not([type=checkbox]) { width: 100%; min-width: 0; padding: 12px; border: 1px solid #708377; border-radius: 4px; font: inherit; }
+.choice { display: flex; align-items: flex-start; gap: 12px; }
+.choice input { flex: 0 0 auto; width: 20px; height: 20px; margin: 3px 0 0; }
+.choice label { min-width: 0; flex: 1; }
+.actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 24px; }
+button { font: inherit; font-size: 16px; line-height: 1.6; min-height: 44px; padding: 10px 20px; border: 1px solid #2e5740; border-radius: 4px; cursor: pointer; overflow-wrap: anywhere; max-width: 100%; }
+#save { background: #234f36; color: white; }
+#reset { background: white; color: #234f36; }
+:focus-visible { outline: 3px solid #1f5cb8; outline-offset: 3px; }
+.error { color: #a22222; border-left: 3px solid currentColor; padding-left: 12px; }
+[hidden] { display: none !important; }
+#result { min-height: 26px; }
+.after .field + .field { border-top: 0; }
+.before { background: #f4f0fd; }
+.before h1, .before .intro { text-align: center; }
+.before .field { border-radius: 16px; margin-bottom: 24px; box-shadow: 0 4px 18px #7153aa20; }
+.before #save, .before #reset { background: linear-gradient(120deg, #6534a4, #3c52a7); color: white; border-color: #6534a4; flex: 1; }
+/* Deliberate local clipping: the whole document can still pass overflow checks. */
+.before #delivery-label { white-space: nowrap; overflow: hidden; }
+@media (max-width: 420px) { .field { padding: 16px; } }

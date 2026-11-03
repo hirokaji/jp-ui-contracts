@@ -6,10 +6,10 @@
 
 ## 1. 準備する
 
-Git、Node.js 22、Python 3.12を使用し、公開済みv0.3.0を取得する手順です。Windows PowerShellとmacOS/Linuxのターミナルで、以下を一行ずつ実行できます。初回の依存関係・Chromium取得にはインターネット接続が必要です。
+Git、Node.js 22、Python 3.12を使用し、公開済みv0.3.1を取得する手順です。Windows PowerShellとmacOS/Linuxのターミナルで、以下を一行ずつ実行できます。初回の依存関係・Chromium取得にはインターネット接続が必要です。
 
 ```bash
-git clone --branch v0.3.0 https://github.com/hirokaji/jp-ui-contracts.git
+git clone --branch v0.3.1 https://github.com/hirokaji/jp-ui-contracts.git
 cd jp-ui-contracts
 npm install --ignore-scripts --no-audit --no-fund
 npx playwright install chromium

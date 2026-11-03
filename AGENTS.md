@@ -39,7 +39,8 @@ python validators/contract.py validate --strict \
   templates/docs/DESIGN.md \
   templates/dashboard/DESIGN.md \
   examples/sample-media/DESIGN.md \
-  examples/sample-saas/DESIGN.md
+  examples/sample-saas/DESIGN.md \
+  examples/notification-settings/DESIGN.md
 python -m unittest discover -s tests -p "test_*.py" -v
 ```
 
