@@ -35,10 +35,10 @@ Japanese UI design contracts and focused browser checks for AI-assisted developm
 
 ## 試す
 
-Git・Node.js 22・Python 3.12を使い、公開済みv0.3.0を試す手順です。`check:ui`はv0.3.0から利用できます。
+Git・Node.js 22・Python 3.12を使い、公開済みv0.3.1を試す手順です。`check:ui`はv0.3.0から利用できます。
 
 ```bash
-git clone --branch v0.3.0 https://github.com/hirokaji/jp-ui-contracts.git
+git clone --branch v0.3.1 https://github.com/hirokaji/jp-ui-contracts.git
 cd jp-ui-contracts
 npm install --ignore-scripts --no-audit --no-fund
 npx playwright install chromium
@@ -89,6 +89,12 @@ URLは実際の画面へ置き換えてください。SPAでは`--ready-selector
 
 自動検査と手動確認の対応、終了コード、Evidence、反例は[検証範囲](docs/validation-coverage.md)を参照してください。
 
+## mainで追加した比較例（未リリース）
+
+[通知設定の比較例](examples/notification-settings/README.md)は、同じ文言・操作で通常、長文、空入力、エラーを比較します。DESIGN.mdで指定した要素の文字サイズ・行間・内容の収まりをPlaywrightで検査し、画面全体の横はみ出しだけでは見逃す文字切れを再現します。既存の`check:ui`の判定範囲は変わりません。
+
+[条件付き視覚レビュー](docs/conditional-visual-review.md)では、装飾、カード、見出しなどを用途と根拠から判断します。色やグラデーションを一律に禁止せず、契約違反と任意の改善提案を分けます。
+
 ## 用途別テンプレート
 
 | Profile | 主な用途 | 重視すること |
@@ -130,16 +136,16 @@ CIの`rendered-validation-evidence`には画像、JSONメトリクス、HTMLレ�
 
 ## 公開バージョン
 
-最新の公開リリースは[v0.3.0 — local UI checks and onboarding](https://github.com/hirokaji/jp-ui-contracts/releases/tag/v0.3.0)です。2026年11月2日に公開しました。タグ対象は`ace9117f06ee337524dcaca097aa9372a73570e1`です。
+最新の公開リリースは[v0.3.1](https://github.com/hirokaji/jp-ui-contracts/releases/tag/v0.3.1)です。2026年11月2日に公開しました。タグ対象は`1a6b1e2baed6217aba649927669e03f5cb159f35`です。
 
-[対象コミットのCI](https://github.com/hirokaji/jp-ui-contracts/actions/runs/41414252638)と[公開処理](https://github.com/hirokaji/jp-ui-contracts/actions/runs/41417707636)は成功しています。リリースには`rendered-validation-evidence.zip`と`release-verification.json`を添付し、コミット・CI・Evidenceの対応を確認できるようにしています。
+[対象コミットのCI](https://github.com/hirokaji/jp-ui-contracts/actions/runs/41427743810)、[公開しない検証](https://github.com/hirokaji/jp-ui-contracts/actions/runs/41428191857)、[正式公開](https://github.com/hirokaji/jp-ui-contracts/actions/runs/41429015097)は成功しています。strict契約7件、Pythonテスト30件、CLI検証、ブラウザ27件成功・意図したスキップ1件を確認し、Evidence artifact `13132727036`を公開判定に使用しました。リリースには`rendered-validation-evidence.zip`と`release-verification.json`を添付しています。
 
-機能と制約は[リリースノート](docs/releases/v0.3.0.md)、検証方法は[手動公開の手順・条件](docs/v0.3-release-gate.md)を参照してください。rootの`RELEASE_MANIFEST.json`はタグ作成前の候補メタデータとして固定し、実際の公開記録はGitHub Releaseと添付の検証記録で管理します。
+rootの`RELEASE_MANIFEST.json`と[v0.3.1準備記録](docs/releases/v0.3.1.md)はタグ作成前の記録として固定しています。そこに残る候補表記は現在の公開状態を示しません。実際の公開記録はGitHub Releaseと添付検証記録を参照してください。[公開手順・条件](docs/v0.3-release-gate.md)も保全しています。
 
-mainでは次版[v0.3.1候補](docs/releases/v0.3.1.md)を準備中です。未公開のため、上記導入手順は公開済みv0.3.0のままです。v0.3.0のmanifestは[履歴](docs/releases/v0.3.0-manifest.json)に保全しています。次版には、新しい最終mainコミットのCIとEvidenceによる別途の公開判定が必要です。
+mainの通知設定比較例・要素検査・視覚レビューは公開後の追加で、v0.3.1タグには含まれません。次の公開には別の最終mainコミットのCIとEvidenceが必要です。v0.3.0の[manifest](docs/releases/v0.3.0-manifest.json)、タグ、公開物は維持しています。
 
 以前の[v0.2.0](https://github.com/hirokaji/jp-ui-contracts/releases/tag/v0.2.0)のタグ・公開記録は維持しています。
 
 ## License
 
-MIT
+MIT。条件付き視覚レビュー内の翻案部分は、同文書に記したCC BY 4.0の出典・条件に従います。

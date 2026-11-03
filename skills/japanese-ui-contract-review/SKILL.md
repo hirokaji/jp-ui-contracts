@@ -27,23 +27,24 @@ Recommended:
    ```
 3. Identify the active profile and validation targets.
 4. Create or modify the UI without weakening explicit contract rules.
-5. Test the output against the closest fixtures. At minimum, check any fixture named by the contract's validation targets.
+5. Inspect the actual application states named by the contract. Use the closest fixtures as reproducible references; fixture success does not validate the application.
 6. When this repository's browser harness is available, run rendered validation:
    ```bash
    npm install
    npx playwright install chromium
    npm run test:rendered
    ```
-7. Review the rendered result using `validators/scorecard.md` and classify findings as PASS / WARN / FAIL.
-8. Attribute each WARN or FAIL to exactly one primary bucket:
+7. Check the actual local application with `npm run check:ui -- --url <local-url>`. This checks document horizontal overflow only. For explicit element measurements, adapt the opt-in helper described in `examples/notification-settings/README.md`; keep its table in DESIGN.md.
+8. Review the rendered result using `validators/scorecard.md` and `docs/conditional-visual-review.md`. Separate MUST failures from contextual recommendations. Unknown required checks remain WARN with acceptance pending. Do not ban colors, gradients or emoji without task-specific evidence.
+9. Attribute each WARN or FAIL to exactly one primary bucket:
    - missing contract rule
    - weak profile default
    - missing fixture
    - validator gap
    - implementation bug
-9. Fix the owning layer. Do not hide a contract problem with a one-off local style override unless the override is explicitly justified.
-10. Re-run static and rendered validation as applicable.
-11. Report Evidence and residual manual checks.
+10. Fix the owning layer. Do not hide a contract problem with a one-off local style override unless the override is explicitly justified.
+11. Re-run static and rendered validation as applicable.
+12. Report Evidence and residual manual checks.
 
 ## Evidence priority
 
@@ -118,4 +119,4 @@ Run the browser gates:
 npm run test:rendered
 ```
 
-See `docs/v0.2-release-gate.md` for the release-level acceptance conditions.
+See `docs/v0.3-release-gate.md` for the release-level acceptance conditions.
