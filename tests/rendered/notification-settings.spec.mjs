@@ -34,8 +34,8 @@ for (const state of ['normal', 'long', 'empty', 'error']) {
     const before = await inspectMeasuredElements(page, targets);
     const root = await page.evaluate(() => ({ client: document.documentElement.clientWidth, scroll: document.documentElement.scrollWidth }));
     expect(root.scroll).toBeLessThanOrEqual(root.client + 1);
-    if (state === 'long') expect(before.find(x => x.selector === '#delivery-label').status).toBe('FAIL');
     await evidence(page, testInfo, `before-${state}`, before);
+    if (state === 'long') expect(before.find(x => x.selector === '#delivery-label').status).toBe('FAIL');
     await open(page, 'after', state);
     expect(await page.locator('main').innerText()).toBe(beforeText);
     expect(await page.locator('#display-name').inputValue()).toBe(beforeName);

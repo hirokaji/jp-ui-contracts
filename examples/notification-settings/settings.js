@@ -2,7 +2,7 @@
 const state = new URLSearchParams(location.search).get('state') || 'normal';
 const initialName = state === 'empty' ? '' : '品質保証チーム';
 const deliveryLabel = state === 'long'
-  ? '品質保証部・製造技術部・海外サービス拠点から届く重要な変更通知をメールで受け取る'
+  ? '品質保証部・製造技術部・海外サービス拠点から届く、設計変更・製造条件の見直し・出荷後の対応方針に関する重要な変更通知と確認依頼をメールで受け取る'
   : '重要な変更通知をメールで受け取る';
 document.querySelector('#settings').innerHTML = `
   <p class="eyebrow">ワークスペース設定 / 通知</p>
