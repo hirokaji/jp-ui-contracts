@@ -1,0 +1,37 @@
+:lang(ja) .motion-expand {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.3s ease;
+}
+
+:lang(ja) .motion-expand > * {
+  min-height: 0;
+  overflow: hidden;
+}
+
+:lang(ja) .motion-expand[data-open="true"] {
+  grid-template-rows: 1fr;
+}
+
+:lang(ja) .motion-label-stack {
+  display: inline-grid;
+}
+
+:lang(ja) .motion-label-stack > * {
+  grid-area: 1 / 1;
+}
+
+:lang(ja) .motion-label-stack > :not([data-active="true"]) {
+  visibility: hidden;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :lang(ja) *,
+  :lang(ja) *::before,
+  :lang(ja) *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
