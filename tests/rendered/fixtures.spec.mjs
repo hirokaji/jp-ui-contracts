@@ -8,6 +8,7 @@ const fixtures = [
   'dense-tables',
   'mobile-wrap-stress',
   'docs-prose-code',
+  'motion-expand',
 ];
 
 async function captureEvidence(page, testInfo, fixture) {
