@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Fixture: Motion with Japanese text</title>
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: system-ui, -apple-system, "Segoe UI", "Hiragino Sans", "Yu Gothic UI", "Yu Gothic", sans-serif; color: #202124; background: #f7f7f7; }
+  main { max-width: 620px; margin: 0 auto; padding: 32px 20px 64px; }
+  section { background: #fff; border: 1px solid #ddd; padding: 24px; margin-bottom: 28px; }
+  h1 { font-size: 1.35rem; line-height: 1.5; }
+  h2 { font-size: 1.05rem; line-height: 1.5; margin-top: 0; }
+  p { line-height: 1.7; }
+  .note { font-size: .85rem; line-height: 1.55; color: #555; }
+  button { min-height: 44px; padding: 8px 16px; font: inherit; line-height: 1.4; cursor: pointer; }
+
+  /* --- Pattern A: fragile implementation (fixed pixel height, animated width) --- */
+  .bad-panel { height: 0; overflow: hidden; transition: height .35s ease; }
+  .bad-panel.open { height: 132px; }
+  .bad-panel p { margin: 12px 0 0; }
+  .bad-row { display: flex; align-items: center; gap: 12px; margin-top: 20px; }
+  .bad-button { width: 132px; white-space: nowrap; overflow: hidden; transition: width .35s ease; }
+  .bad-button.done { width: 216px; }
+
+  /* --- Pattern B: contract implementation (grid rows, reserved label width) --- */
+  .good-panel { display: grid; grid-template-rows: 0fr; transition: grid-template-rows .35s ease; }
+  .good-panel > div { min-height: 0; overflow: hidden; }
+  .good-panel.open { grid-template-rows: 1fr; }
+  .good-panel p { margin: 12px 0 0; }
+  .good-row { display: flex; align-items: center; gap: 12px; margin-top: 20px; }
+  .good-button { transition: opacity .2s ease, transform .2s ease; }
+  .label-stack { display: inline-grid; }
+  .label-stack > span { grid-area: 1 / 1; }
+  .label-stack > span:not([data-active="true"]) { visibility: hidden; }
+  @media (prefers-reduced-motion: reduce) {
+    .good-panel, .good-button { transition: none; }
+  }
+
+  @media (max-width: 420px) { main { padding: 20px 12px 48px; } section { padding: 18px 14px; } }
+</style>
+</head>
+<body>
+<main data-fixture="motion-expand">
+  <h1>アニメーション中の日本語テキストの切れとレイアウト移動を確認する</h1>
+  <p class="note">各セクションのボタンを操作し、展開の途中と完了後、ラベル切り替えの前後で確認します。ブラウザの開発者ツールで <code>prefers-reduced-motion</code> を有効にした状態でも確認してください。</p>
+
+  <section aria-labelledby="pattern-a">
+    <h2 id="pattern-a">パターンA：固定高さ・幅アニメーション（崩れやすい実装）</h2>
+    <button type="button" id="bad-toggle" aria-expanded="false">詳細な注意事項をひらく</button>
+    <div class="bad-panel" id="bad-panel">
+      <p>この設定を有効にすると、外部システムへの書き込みはすべて記録され、あとから担当者が履歴を確認できます。書き込みの前に承認を必須にしている場合は、承認が完了するまで実際の変更は行われません。問題が起きたときは、履歴から変更を取り消すことができます。</p>
+    </div>
+    <div class="bad-row">
+      <button type="button" class="bad-button" id="bad-action">公開する</button>
+      <span id="bad-status">下書き保存済み</span>
+    </div>
+    <p class="note">確認点：展開完了後に本文の最終行が切れていないか。公開ボタンの幅が変わり、右のステータス文が押し出されていないか。</p>
+  </section>
+
+  <section aria-labelledby="pattern-b">
+    <h2 id="pattern-b">パターンB：契約に沿った実装（recipes/motion.css の考え方）</h2>
+    <button type="button" id="good-toggle" aria-expanded="false">詳細な注意事項をひらく</button>
+    <div class="good-panel" id="good-panel">
+      <div>
+        <p>この設定を有効にすると、外部システムへの書き込みはすべて記録され、あとから担当者が履歴を確認できます。書き込みの前に承認を必須にしている場合は、承認が完了するまで実際の変更は行われません。問題が起きたときは、履歴から変更を取り消すことができます。</p>
+      </div>
+    </div>
+    <div class="good-row">
+      <button type="button" class="good-button" id="good-action">
+        <span class="label-stack">
+          <span data-active="true">公開する</span>
+          <span data-active="false">公開しました。あとから取り消せます</span>
+        </span>
+      </button>
+      <span id="good-status">下書き保存済み</span>
+    </div>
+    <p class="note">確認点：どの幅でも本文が最後まで読めるか。ラベルが切り替わってもボタンの幅と右のステータス文が動かないか。</p>
+  </section>
+</main>
+<script>
+  function wireToggle(buttonId, panelId) {
+    var button = document.getElementById(buttonId);
+    var panel = document.getElementById(panelId);
+    button.addEventListener('click', function () {
+      var open = panel.classList.toggle('open');
+      button.setAttribute('aria-expanded', String(open));
+    });
+  }
+  wireToggle('bad-toggle', 'bad-panel');
+  wireToggle('good-toggle', 'good-panel');
+
+  var badAction = document.getElementById('bad-action');
+  badAction.addEventListener('click', function () {
+    var done = badAction.classList.toggle('done');
+    badAction.textContent = done ? '公開しました。あとから取り消せます' : '公開する';
+    document.getElementById('bad-status').textContent = done ? '公開中' : '下書き保存済み';
+  });
+
+  var goodAction = document.getElementById('good-action');
+  goodAction.addEventListener('click', function () {
+    var labels = goodAction.querySelectorAll('.label-stack > span');
+    var nowDone = labels[0].getAttribute('data-active') === 'true';
+    labels[0].setAttribute('data-active', String(!nowDone));
+    labels[1].setAttribute('data-active', String(nowDone));
+    document.getElementById('good-status').textContent = nowDone ? '公開中' : '下書き保存済み';
+  });
+</script>
+</body>
+</html>
