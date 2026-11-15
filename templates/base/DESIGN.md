@@ -259,6 +259,11 @@ html:lang(ja) {
 - Motion should support hierarchy, not decorate it
 - Avoid large shifts that disturb reading
 - Loading states must stay legible in Japanese
+- Do not animate the width or height of a container that holds Japanese text; prefer `transform` and `opacity` so glyphs and line boxes are never clipped mid-transition
+- Expanding surfaces must reveal Japanese text without clipping the final line at any supported width; do not pair a fixed pixel height with `overflow: hidden` on wrapping text
+- Buttons and controls whose label changes with state must reserve space for the longest label, so surrounding layout does not shift when the state changes
+- Do not apply scramble, roll, or per-character animation to Japanese text that carries meaning
+- Honor `prefers-reduced-motion`; every state and action reachable through animation must remain reachable without it
 
 ---
 
@@ -304,5 +309,6 @@ Do not imitate Western editorial spacing in Japanese body text without review.
 - Must pass mixed-script heading review
 - Must pass long URL overflow review
 - Must pass form density review
+- Must pass motion review for expanding surfaces and state-changing labels
 - Must pass mobile layout review
 - Must pass color contrast review

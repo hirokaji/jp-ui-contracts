@@ -4,6 +4,7 @@ All notable changes to `jp-ui-contracts` are documented here.
 
 ## [Unreleased]
 
+- Add `motion-expand` fixture, `recipes/motion.css`, and Japanese motion rules in the base contract (Section 10): animated surfaces must not clip Japanese text, state-changing labels must reserve their widest width, and `prefers-reduced-motion` must be honored.
 - Add conditional visual review: separate required contract failures from contextual recommendations; retain source attribution for adapted review cues.
 - Add a synthetic notification-settings before/after example with shared content and behavior across normal, long, empty and error states.
 - Read opt-in measured elements directly from DESIGN.md; check font size, line height and local overflow with negative regression cases and screenshot/JSON Evidence. The local-URL CLI remains unchanged.

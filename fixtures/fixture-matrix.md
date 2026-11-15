@@ -11,6 +11,7 @@ This matrix defines the required failure-oriented fixture set for `jp-ui-contrac
 | `dense-tables` | P1 | implemented + CI-gated | Table scanability collapses or overflow escapes its surface | saas, dashboard, docs |
 | `mobile-wrap-stress` | P1 | implemented + CI-gated | Narrow widths force bad line breaks or undersized actions | all |
 | `docs-prose-code` | P2 | implemented + CI-gated | Prose, code, callouts, and tables inherit the wrong density or overflow responsibility | docs, base |
+| `motion-expand` | P1 | implemented + CI-gated | Animated surfaces clip Japanese text, or layout shifts when a control label changes state | saas, dashboard, base |
 
 ---
 
@@ -61,6 +62,14 @@ Covers:
 - form input
 - modal / card actions
 - minimum 44px marked action height
+
+### `motion-expand`
+Covers:
+- expanding panels that animate to a fixed pixel height
+- grid-row expanding panels that never clip the final line
+- buttons whose label changes with state
+- reserving the widest label width to prevent layout shift
+- `prefers-reduced-motion` behavior
 
 ---
 

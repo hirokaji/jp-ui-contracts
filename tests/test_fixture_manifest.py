@@ -10,6 +10,7 @@ REQUIRED_FIXTURES = (
     "dense-tables",
     "mobile-wrap-stress",
     "docs-prose-code",
+    "motion-expand",
 )
 
 
