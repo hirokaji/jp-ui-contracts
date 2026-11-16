@@ -8,12 +8,13 @@
 |---|---|---|---|
 | DESIGN.md | `python validators/contract.py validate ...` | Locale / Profile / Review status、Validation Targetsの存在、CSSコードブロック内のbreak-all検出 | 指定値の妥当性、実装への適合、実際に誰がレビューしたか |
 | 厳格モード | `validate --strict ...` | 上記に加えてValidation Targetsが3件以上あること | 項目数は検査の実施・網羅性を証明しない |
-| 固定fixture | `npm run test:rendered` | 7種類のfixture、デスクトップChromiumとPixel 7設定のChromium、横はみ出しと一部の構造条件 | 利用者のアプリ、Firefox / WebKit、実機、全状態 |
+| 固定fixture | `npm run test:rendered` | 8種類のfixture（main。公開済みv0.3.1は7種類）、デスクトップChromiumとPixel 7設定のChromium、横はみ出しと一部の構造条件 | 利用者のアプリ、Firefox / WebKit、実機、全状態 |
 | 利用者の画面 | `npm run check:ui -- --url ...` | 指定したローカルURL・画面幅での文書全体の横はみ出し | 契約への適合、部品内部の欠け、見た目、操作性 |
 | 表・コード | fixture内の指定要素 | overflow-xがauto / scrollであること、対象が表示されること | 任意の表の自動認識、内容の読みやすさ |
 | タップ対象 | mobile-wrap-stress内の指定要素 | モバイル設定で高さ44px以上 | 幅、間隔、全操作要素、アクセシビリティ全般 |
 | 日本語フォーム | forms-ime-errors | 指定ラベル・補足・エラー・コントロールが表示されること | 実際のIME変換、候補表示、フォーカス操作 |
 | 通知設定の比較例（mainの未リリース機能） | `tests/rendered/notification-settings.spec.mjs` | DESIGN.mdの指定4要素の文字サイズ・行間・局所overflow、4状態の内容保持、キーボード復旧 | 祖先によるクリップ、重なり、実IME、読み上げ、200%ズーム、実利用者評価 |
+| モーション比較例（mainの未リリース機能） | `motion-expand` | 初期状態の文書全体の横はみ出し、fixture表示、スクリーンショット・寸法の保存 | 開閉中・開閉後の文字切れ、ラベル切り替え時の位置変化、reduced motion、契約との整合性は未自動化 |
 | 読みやすさ・和欧混植・配色 | scorecardと目視 | 自動合否には含めない | 実フォント、改行、コントラスト、内容と用途に沿った判断 |
 
 ## 利用者URLの検査仕様
